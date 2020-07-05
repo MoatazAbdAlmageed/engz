@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const cors = require("cors");
 // const tasks = fs.readFileSync("./data/tasks.json", "utf8"); //todo get it from db
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
@@ -9,6 +10,7 @@ require("dotenv").config();
 const taskRoutes = require("./routes/task");
 const { connection } = require("./db");
 
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 

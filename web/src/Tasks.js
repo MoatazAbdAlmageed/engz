@@ -39,7 +39,7 @@ function Tasks(props) {
   };
   useEffect(() => {
     getTasks();
-  }, [REACT_APP_API_URL]);
+  }, [`${REACT_APP_API_URL}/${props.type}`]);
 
   return (
     <>

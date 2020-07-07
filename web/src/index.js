@@ -28,10 +28,10 @@ ReactDOM.render(
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
-          <Route path="/tasks">
+          <Route exact={true} path="/tasks">
             <Tasks type="" />
           </Route>{" "}
-          <Route path="/completed-tasks">
+          <Route exact={true} path="/completed-tasks">
             <Tasks type="completed" />
           </Route>
           <Route path="/">

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
 require("dotenv").config();
 function Tasks(props) {
-  const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks/`;
-  console.log("🚀🚀🚀🚀🚀🚀 this.props");
+  console.log("🚀🚀🚀🚀🚀🚀 props");
   console.log(props);
   console.log("----------------------------------------------------");
   console.log();
+  const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks/`;
   const [tasks, setTasks] = useState([]);
   const [task, setTask] = useState([]);
 
@@ -29,6 +29,10 @@ function Tasks(props) {
   };
 
   const deleteTaskAPI = async (task) => {
+    if (!window.confirm("Delete the item?")) {
+      return;
+    }
+
     const taskApi = await fetch(`${REACT_APP_API_URL}/delete/${task._id}`, {
       method: "DELETE",
     });

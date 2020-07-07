@@ -2,14 +2,17 @@ const Task = require("../models/task");
 const create = (req, res) => {
   const { title } = req.body;
   if (!title) {
-    res.redirect("/");
-  }
-  const task = new Task({ title: title.trim(), status: false });
-  task.save().then(() => {
     res
-      .status(200)
-      .json({ statusCode: 200, message: "task created!", payload: task });
-  });
+      .status(400)
+      .json({ statusCode: 400, message: "task title is requires " });
+  } else {
+    const task = new Task({ title: title.trim(), status: false });
+    task.save().then(() => {
+      res
+        .status(200)
+        .json({ statusCode: 200, message: "task created!", payload: task });
+    });
+  }
 };
 const list = (req, res) => {
   const completed = req.url == "/completed" ? true : false;

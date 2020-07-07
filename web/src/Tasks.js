@@ -4,12 +4,9 @@ import Button from "@atlaskit/button";
 import TextField from "@atlaskit/textfield";
 import styled from "styled-components";
 import DynamicTable from "@atlaskit/dynamic-table";
+import Moment from "react-moment";
 
 function Tasks(props) {
-  console.log("🚀🚀🚀🚀🚀🚀 props");
-  console.log(props);
-  console.log("----------------------------------------------------");
-  console.log();
   const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks/`;
   const [tasks, setTasks] = useState([]);
 
@@ -72,6 +69,10 @@ function Tasks(props) {
         key: "title",
         content: "Title",
       },
+      {
+        key: "createdAt",
+        content: "createdAt",
+      },
     ],
   };
   const rows =
@@ -82,6 +83,15 @@ function Tasks(props) {
         {
           key: "task.title",
           content: <p>{task.title}</p>,
+          isSortable: true,
+        },
+        {
+          key: "task.createdAt",
+          content: (
+            <p>
+              <Moment fromNow>{task.createdAt}</Moment>
+            </p>
+          ),
           isSortable: true,
         },
       ],
@@ -95,7 +105,7 @@ function Tasks(props) {
         <DynamicTable
           head={head}
           rows={rows}
-          rowsPerPage={10}
+          rowsPerPage={5}
           defaultPage={1}
           loadingSpinnerSize="large"
           isLoading={false}

@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-require("dotenv").config();
+
+import Form, { Field } from "@atlaskit/form";
+import Button from "@atlaskit/button";
+import TextField from "@atlaskit/textfield";
+
 function Tasks(props) {
   console.log("🚀🚀🚀🚀🚀🚀 props");
   console.log(props);
@@ -7,7 +11,6 @@ function Tasks(props) {
   console.log();
   const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks/`;
   const [tasks, setTasks] = useState([]);
-  const [task, setTask] = useState([]);
 
   const getTasks = async () => {
     const tasksApi = await fetch(`${REACT_APP_API_URL}/${props.type}`);
@@ -15,7 +18,7 @@ function Tasks(props) {
     setTasks(tasksArray);
   };
 
-  const saveTaskAPI = async () => {
+  const saveTaskAPI = async (task) => {
     const taskApi = await fetch(`${REACT_APP_API_URL}/create`, {
       method: "POST",
       body: JSON.stringify({ title: task }),
@@ -24,7 +27,6 @@ function Tasks(props) {
     const taskData = await taskApi.json();
     if (taskData.statusCode === 200) {
       getTasks();
-      setTask("");
     }
   };
 
@@ -45,15 +47,25 @@ function Tasks(props) {
     getTasks();
   }, [`${REACT_APP_API_URL}/${props.type}`]);
 
+  // todo move TaskForm to another component
+  const TaskForm = () => (
+    <Form onSubmit={(data) => saveTaskAPI(data.task)}>
+      {({ formProps }) => (
+        <form {...formProps}>
+          <Field name="task" defaultValue="" label="Task" isRequired>
+            {({ fieldProps }) => <TextField {...fieldProps} />}
+          </Field>
+          <Button type="submit" appearance="primary">
+            Submit
+          </Button>
+        </form>
+      )}
+    </Form>
+  );
+
   return (
     <>
-      <input
-        onChange={(e) => setTask(e.target.value)}
-        type="text"
-        value={task}
-        placeholder="task title here"
-      />
-      <button onClick={saveTaskAPI}>Save</button>
+      <TaskForm />
       <h2>
         {props.type.toUpperCase()} Tasks {tasks.length}{" "}
       </h2>

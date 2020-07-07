@@ -29,7 +29,7 @@ const update = (req, res) => {
     { _id },
     {
       title: title.trim(),
-      status: false,
+      // status: false, // todo update this (get status from )
     },
     { new: true },
     (err, task) => {

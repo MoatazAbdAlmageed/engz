@@ -7,7 +7,7 @@ const bodyParser = require("body-parser");
 const moment = require("moment");
 const methodOverride = require("method-override");
 require("dotenv").config();
-const taskRoutes = require("./routes/task");
+const routes = require("./routes/");
 const { connection } = require("./db");
 
 app.use(cors());
@@ -33,7 +33,7 @@ app.use((req, res, next) => {
 });
 
 // Tasks
-app.use("/tasks", taskRoutes);
+app.use("/api", routes);
 
 app.use((req, res) => {
   res.json({ error: "404" });

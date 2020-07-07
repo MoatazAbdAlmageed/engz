@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start:dev": "node index.js",
-    "watch": "nodemon --watch index.js --ext js --ignore '*.spec.ts' --exec yarn start:dev"
+    "watch": "nodemon --watch  index.js   --watch 'src/**'   --exec yarn start:dev"
   },
   "keywords": [],
   "author": "",

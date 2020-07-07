@@ -17,7 +17,10 @@ ReactDOM.render(
               <Link to="/">Home</Link>
             </li>
             <li>
-              <Link to="/tasks">tasks</Link>
+              <Link to="/tasks">Tasks</Link>
+            </li>
+            <li>
+              <Link to="/completed-tasks">Completed Tasks</Link>
             </li>
           </ul>
         </nav>
@@ -26,7 +29,10 @@ ReactDOM.render(
             renders the first one that matches the current URL. */}
         <Switch>
           <Route path="/tasks">
-            <Tasks />
+            <Tasks type="" />
+          </Route>{" "}
+          <Route path="/completed-tasks">
+            <Tasks type="completed" />
           </Route>
           <Route path="/">
             <App />

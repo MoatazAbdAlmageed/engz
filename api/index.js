@@ -7,8 +7,8 @@ const bodyParser = require("body-parser");
 const moment = require("moment");
 const methodOverride = require("method-override");
 require("dotenv").config();
-const routes = require("./routes/");
-const { connection } = require("./db");
+const routes = require("./src/routes");
+const { connection } = require("./src/db");
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -35,6 +35,17 @@ app.use((req, res, next) => {
 // Tasks
 app.use("/api", routes);
 
-app.use((req, res) => {
+/**
+ * Error handler middleware
+ */
+app.use((err, req, res, next) => {
+  console.log("🚀🚀🚀🚀🚀🚀 err.stack");
+  console.log(err.stack);
+  console.log("----------------------------------------------------");
+  console.log();
+  res.status(500).send("Something broke!");
+});
+
+app.use((req, res, next) => {
   res.json({ error: "404" });
 });

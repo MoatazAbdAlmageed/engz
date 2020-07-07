@@ -1,18 +1,14 @@
 const Task = require("../models/task");
-const create = (req, res) => {
+const create = (req, res, next) => {
   const { title } = req.body;
-  if (!title) {
-    res
-      .status(400)
-      .json({ statusCode: 400, message: "task title is requires " });
-  } else {
-    const task = new Task({ title: title.trim(), status: false });
-    task.save().then(() => {
+  //todo use express validation
+  Task.create([{ title: title.trim(), status: false }])
+    .then((task) => {
       res
         .status(200)
         .json({ statusCode: 200, message: "task created!", payload: task });
-    });
-  }
+    })
+    .catch(next);
 };
 const list = (req, res) => {
   const completed = req.url == "/completed" ? true : false;

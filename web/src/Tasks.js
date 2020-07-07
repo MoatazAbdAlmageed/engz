@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
-
 import Form, { Field } from "@atlaskit/form";
 import Button from "@atlaskit/button";
 import TextField from "@atlaskit/textfield";
+import styled from "styled-components";
+import DynamicTable from "@atlaskit/dynamic-table";
 
 function Tasks(props) {
   console.log("🚀🚀🚀🚀🚀🚀 props");
@@ -12,6 +13,9 @@ function Tasks(props) {
   const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks/`;
   const [tasks, setTasks] = useState([]);
 
+  const Wrapper = styled.div`
+    min-width: 600px;
+  `;
   const getTasks = async () => {
     const tasksApi = await fetch(`${REACT_APP_API_URL}/${props.type}`);
     const tasksArray = await tasksApi.json();
@@ -62,21 +66,46 @@ function Tasks(props) {
       )}
     </Form>
   );
-
+  const head = {
+    cells: [
+      {
+        key: "title",
+        content: "Title",
+      },
+    ],
+  };
+  const rows =
+    tasks.length &&
+    tasks.map((task) => ({
+      key: task._id,
+      cells: [
+        {
+          key: "task.title",
+          content: <p>{task.title}</p>,
+          isSortable: true,
+        },
+      ],
+    }));
   return (
     <>
       <TaskForm />
-      <h2>
-        {props.type.toUpperCase()} Tasks {tasks.length}{" "}
-      </h2>
-      <ol>
-        {tasks.map((task) => (
-          <li key={task._id}>
-            {task.title}{" "}
-            <button onClick={(e) => deleteTaskAPI(task)}>Delete</button>{" "}
-          </li>
-        ))}
-      </ol>
+      <h2>Tasks</h2>
+
+      <Wrapper>
+        <DynamicTable
+          head={head}
+          rows={rows}
+          rowsPerPage={10}
+          defaultPage={1}
+          loadingSpinnerSize="large"
+          isLoading={false}
+          isFixedSize
+          defaultSortKey="term"
+          defaultSortOrder="ASC"
+          onSort={() => console.log("onSort")}
+          onSetPage={() => console.log("onSetPage")}
+        />
+      </Wrapper>
     </>
   );
 }

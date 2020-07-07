@@ -5,9 +5,15 @@ import TextField from "@atlaskit/textfield";
 import styled from "styled-components";
 import DynamicTable from "@atlaskit/dynamic-table";
 import Moment from "react-moment";
+import InlineEdit from "@atlaskit/inline-edit";
+import { fontSize, gridSize } from "@atlaskit/theme";
+import Textfield from "@atlaskit/textfield";
 
+function createKey(input) {
+  return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
+}
 function Tasks(props) {
-  const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks/`;
+  const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks`;
   const [tasks, setTasks] = useState([]);
 
   const Wrapper = styled.div`
@@ -31,7 +37,12 @@ function Tasks(props) {
     }
   };
 
+  // todo use this
   const deleteTaskAPI = async (task) => {
+    console.log("🚀🚀🚀🚀🚀🚀 task");
+    console.log(task);
+    console.log("----------------------------------------------------");
+    console.log();
     if (!window.confirm("Delete the item?")) {
       return;
     }
@@ -44,6 +55,25 @@ function Tasks(props) {
       getTasks();
     }
   };
+  const updateTaskAPI = async (task) => {
+    const taskApi = await fetch(`${REACT_APP_API_URL}/update`, {
+      method: "PUT",
+      body: JSON.stringify({
+        _id: task._id,
+        title: task.title,
+        status: task.status,
+      }),
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+    const taskData = await taskApi.json();
+    if (taskData.statusCode === 200) {
+      getTasks();
+    }
+  };
+
   useEffect(() => {
     getTasks();
   }, [`${REACT_APP_API_URL}/${props.type}`]);
@@ -63,6 +93,17 @@ function Tasks(props) {
       )}
     </Form>
   );
+
+  const ReadViewContainer = styled.div`
+    display: flex;
+    font-size: ${fontSize()}px;
+    line-height: ${(gridSize() * 2.5) / fontSize()};
+    max-width: 100%;
+    min-height: ${(gridSize() * 2.5) / fontSize()}em;
+    padding: ${gridSize()}px ${gridSize() - 2}px;
+    word-break: break-word;
+  `;
+
   const head = {
     cells: [
       {
@@ -73,6 +114,14 @@ function Tasks(props) {
         key: "createdAt",
         content: "createdAt",
       },
+      {
+        key: "updatedAt",
+        content: "updatedAt",
+      },
+      {
+        key: "DeleteAction",
+        content: "Delete?",
+      },
     ],
   };
   const rows =
@@ -81,15 +130,51 @@ function Tasks(props) {
       key: task._id,
       cells: [
         {
-          key: "task.title",
-          content: <p>{task.title}</p>,
+          key: createKey(task.title),
+          content: (
+            <div>
+              {" "}
+              <InlineEdit
+                defaultValue={task.title}
+                editView={(fieldProps) => (
+                  <Textfield {...fieldProps} autoFocus />
+                )}
+                readView={() => (
+                  <ReadViewContainer>
+                    {task.title || "Click to enter value"}
+                  </ReadViewContainer>
+                )}
+                onConfirm={(value) => {
+                  updateTaskAPI({ ...task, title: value });
+                }}
+              />{" "}
+            </div>
+          ),
           isSortable: true,
         },
         {
-          key: "task.createdAt",
+          key: createKey(task.createdAt),
           content: (
             <p>
               <Moment fromNow>{task.createdAt}</Moment>
+            </p>
+          ),
+          isSortable: true,
+        },
+        {
+          key: createKey(task.updatedAt),
+          content: (
+            <p>
+              <Moment fromNow>{task.updatedAt}</Moment>
+            </p>
+          ),
+          isSortable: true,
+        },
+        {
+          key: createKey(task._id),
+          content: (
+            <p>
+              <button onClick={() => deleteTaskAPI(task)}>Delete</button>
             </p>
           ),
           isSortable: true,

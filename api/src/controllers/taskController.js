@@ -28,7 +28,7 @@ const update = (req, res) => {
     { _id },
     {
       title: title.trim(),
-      // status: false, // todo update this (get status from )
+      status, // todo update this (get status from )
     },
     { new: true },
     (err, task) => {

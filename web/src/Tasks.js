@@ -107,6 +107,10 @@ function Tasks(props) {
   const head = {
     cells: [
       {
+        key: "Check",
+        content: "Check",
+      },
+      {
         key: "title",
         content: "Title",
       },
@@ -129,6 +133,26 @@ function Tasks(props) {
     tasks.map((task) => ({
       key: task._id,
       cells: [
+        {
+          key: createKey("check"),
+          content: (
+            <p>
+              <input
+                type="checkbox"
+                checked={task.status ? " checked" : ""}
+                name="check"
+                id="checked"
+                onChange={(e) => {
+                  updateTaskAPI({
+                    ...task,
+                    status: !task.status,
+                  });
+                }}
+              />
+            </p>
+          ),
+          isSortable: true,
+        },
         {
           key: createKey(task.title),
           content: (

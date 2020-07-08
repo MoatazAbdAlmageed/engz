@@ -11,6 +11,8 @@ import Textfield from "@atlaskit/textfield";
 import Page, { Grid, GridColumn } from "@atlaskit/page";
 import Swal from "sweetalert2";
 import { Checkbox, CheckboxIcon } from "@atlaskit/checkbox";
+import Loader from "react-loader-spinner";
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
@@ -18,6 +20,7 @@ function createKey(input) {
 function Tasks(props) {
   const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks`;
   const [tasks, setTasks] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const title = `(${tasks.length}) ` + (props.type ? props.type : "Todo");
   const Wrapper = styled.div`
@@ -28,12 +31,15 @@ function Tasks(props) {
     margin-top: 1.9em;
   `;
   const getTasks = async () => {
+    setLoading(true);
     const tasksApi = await fetch(`${REACT_APP_API_URL}/${props.type}`);
     const tasksArray = await tasksApi.json();
     setTasks(tasksArray);
+    setLoading(false);
   };
 
   const createTaskAPI = async (task) => {
+    setLoading(true);
     const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
       method: "POST",
       body: JSON.stringify({ title: task }),
@@ -63,6 +69,7 @@ function Tasks(props) {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.value) {
+        setLoading(true);
         const taskApi = await fetch(`${REACT_APP_API_URL}/${task._id}`, {
           method: "DELETE",
         });
@@ -75,6 +82,7 @@ function Tasks(props) {
     });
   };
   const updateTaskAPI = async (task) => {
+    setLoading(true);
     const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
       method: "PUT",
       body: JSON.stringify({
@@ -249,24 +257,32 @@ function Tasks(props) {
     }));
   return (
     <>
-      {!props.type && <TaskForm />}
-      <h2 className="uppercase">{title} tasks</h2>
+      {loading ? (
+        <>
+          <Loader type="Oval" color="#00BFFF" height={80} width={80} />
+        </>
+      ) : (
+        <>
+          {!props.type && <TaskForm />}
+          <h2 className="uppercase">{title} tasks</h2>
 
-      <Wrapper>
-        <DynamicTable
-          head={head}
-          rows={rows}
-          rowsPerPage={5}
-          defaultPage={1}
-          loadingSpinnerSize="large"
-          isLoading={false}
-          isFixedSize
-          defaultSortKey="term"
-          defaultSortOrder="ASC"
-          onSort={() => console.log("onSort")}
-          onSetPage={() => console.log("onSetPage")}
-        />
-      </Wrapper>
+          <Wrapper>
+            <DynamicTable
+              head={head}
+              rows={rows}
+              rowsPerPage={5}
+              defaultPage={1}
+              loadingSpinnerSize="large"
+              isLoading={false}
+              isFixedSize
+              defaultSortKey="term"
+              defaultSortOrder="ASC"
+              onSort={() => console.log("onSort")}
+              onSetPage={() => console.log("onSetPage")}
+            />
+          </Wrapper>
+        </>
+      )}
     </>
   );
 }

@@ -9,6 +9,8 @@ import InlineEdit from "@atlaskit/inline-edit";
 import { fontSize, gridSize } from "@atlaskit/theme";
 import Textfield from "@atlaskit/textfield";
 
+import Swal from "sweetalert2";
+
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
@@ -33,27 +35,33 @@ function Tasks(props) {
     });
     const taskData = await taskApi.json();
     if (taskData.statusCode === 200) {
+      Swal.fire("Created!", "Task has been created.", "success");
       getTasks();
     }
   };
 
   // todo use this
-  const deleteTaskAPI = async (task) => {
-    console.log("🚀🚀🚀🚀🚀🚀 task");
-    console.log(task);
-    console.log("----------------------------------------------------");
-    console.log();
-    if (!window.confirm("Delete the item?")) {
-      return;
-    }
-
-    const taskApi = await fetch(`${REACT_APP_API_URL}/delete/${task._id}`, {
-      method: "DELETE",
+  const deleteTaskAPI = (task) => {
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then(async (result) => {
+      if (result.value) {
+        const taskApi = await fetch(`${REACT_APP_API_URL}/delete/${task._id}`, {
+          method: "DELETE",
+        });
+        const taskData = await taskApi.json();
+        if (taskData.statusCode === 200) {
+          Swal.fire("Deleted!", "Task has been deleted.", "success");
+          getTasks();
+        }
+      }
     });
-    const taskData = await taskApi.json();
-    if (taskData.statusCode === 200) {
-      getTasks();
-    }
   };
   const updateTaskAPI = async (task) => {
     const taskApi = await fetch(`${REACT_APP_API_URL}/update`, {
@@ -70,6 +78,7 @@ function Tasks(props) {
     });
     const taskData = await taskApi.json();
     if (taskData.statusCode === 200) {
+      Swal.fire("Updated!", "Task has been updated.", "success");
       getTasks();
     }
   };
@@ -207,8 +216,8 @@ function Tasks(props) {
     }));
   return (
     <>
-      <TaskForm />
-      <h2>Tasks</h2>
+      {!props.type && <TaskForm />}
+      <h2 className="uppercase">{props.type} tasks</h2>
 
       <Wrapper>
         <DynamicTable

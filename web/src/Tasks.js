@@ -10,6 +10,7 @@ import { fontSize, gridSize } from "@atlaskit/theme";
 import Textfield from "@atlaskit/textfield";
 import Page, { Grid, GridColumn } from "@atlaskit/page";
 import Swal from "sweetalert2";
+import { Checkbox, CheckboxIcon } from "@atlaskit/checkbox";
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
@@ -161,17 +162,15 @@ function Tasks(props) {
           key: createKey("check"),
           content: (
             <p>
-              <input
-                type="checkbox"
-                checked={task.status ? " checked" : ""}
-                name="check"
-                id="checked"
+              <Checkbox
+                defaultChecked={task.status ? " checked" : ""}
                 onChange={(e) => {
                   updateTaskAPI({
                     ...task,
                     status: !task.status,
                   });
                 }}
+                name="checkbox-basic"
               />
             </p>
           ),
@@ -222,7 +221,9 @@ function Tasks(props) {
           key: createKey(task._id),
           content: (
             <p>
-              <button onClick={() => deleteTaskAPI(task)}>Delete</button>
+              <Button appearance="danger" onClick={() => deleteTaskAPI(task)}>
+                Delete
+              </Button>
             </p>
           ),
           isSortable: true,

@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@atlaskit/button": "^14.0.0",
+    "@atlaskit/checkbox": "^11.0.0",
     "@atlaskit/css-reset": "^6.0.0",
     "@atlaskit/dynamic-table": "^14.0.0",
     "@atlaskit/form": "^8.0.0",

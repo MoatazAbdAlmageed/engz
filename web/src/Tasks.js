@@ -7,7 +7,6 @@ import DynamicTable from "@atlaskit/dynamic-table";
 import Moment from "react-moment";
 import InlineEdit from "@atlaskit/inline-edit";
 import { fontSize, gridSize } from "@atlaskit/theme";
-import Textfield from "@atlaskit/textfield";
 import Page, { Grid, GridColumn } from "@atlaskit/page";
 import Swal from "sweetalert2";
 import { Checkbox, CheckboxIcon } from "@atlaskit/checkbox";
@@ -30,9 +29,11 @@ function Tasks(props) {
   const ButtonWrapper = styled.div`
     margin-top: 1.9em;
   `;
-  const getTasks = async () => {
+  const getTasks = async (search = "") => {
     setLoading(true);
-    const tasksApi = await fetch(`${REACT_APP_API_URL}/${props.type}`);
+    const tasksApi = await fetch(
+      `${REACT_APP_API_URL}/${props.type}/?title=${search}`
+    );
     const tasksArray = await tasksApi.json();
     setTasks(tasksArray);
     setLoading(false);
@@ -107,12 +108,35 @@ function Tasks(props) {
     getTasks();
   }, [`${REACT_APP_API_URL}/${props.type}`]);
 
+  const SearchForm = () => (
+    <Form
+      onSubmit={(data) => {
+        getTasks(data.search);
+      }}
+    >
+      {({ formProps }) => (
+        <form {...formProps}>
+          <Field name="search" defaultValue="" label="Search" isRequired>
+            {({ fieldProps }) => (
+              <TextField placeholder="search task" {...fieldProps} />
+            )}
+          </Field>{" "}
+        </form>
+      )}
+    </Form>
+  );
+
   // todo move TaskForm to another component
   const TaskForm = () => (
     <Form onSubmit={(data) => createTaskAPI(data.task)}>
       {({ formProps }) => (
         <form {...formProps}>
           <Page>
+            <Grid>
+              <GridColumn medium={12}>
+                <h2>Create New Task</h2>
+              </GridColumn>
+            </Grid>
             <Grid>
               <GridColumn medium={8}>
                 <Field name="task" defaultValue="" label="Task" isRequired>
@@ -209,7 +233,7 @@ function Tasks(props) {
               <InlineEdit
                 defaultValue={task.title}
                 editView={(fieldProps) => (
-                  <Textfield {...fieldProps} autoFocus />
+                  <TextField {...fieldProps} autoFocus />
                 )}
                 readView={() => (
                   <ReadViewContainer>
@@ -265,6 +289,8 @@ function Tasks(props) {
         <>
           {!props.type && <TaskForm />}
           <h2 className="uppercase">{title} tasks</h2>
+
+          <SearchForm />
 
           <Wrapper>
             <DynamicTable

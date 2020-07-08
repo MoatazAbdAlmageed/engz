@@ -20,8 +20,11 @@ const create = (req, res, next) => {
     .catch(next);
 };
 const list = (req, res) => {
-  const completed = req.url == "/completed" ? true : false;
-  tasks = Task.find()
+  const { path, query } = req;
+
+  const completed = path == "/completed/" ? true : false;
+  console.log();
+  tasks = Task.search(query.title)
     .sort({ createdAt: -1 })
     .where({ status: completed ? true : false })
     .then((tasks) => {

@@ -34,7 +34,7 @@ function Tasks(props) {
   };
 
   const createTaskAPI = async (task) => {
-    const taskApi = await fetch(`${REACT_APP_API_URL}/create`, {
+    const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
       method: "POST",
       body: JSON.stringify({ title: task }),
       headers: { "Content-Type": "application/json" },
@@ -63,7 +63,7 @@ function Tasks(props) {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.value) {
-        const taskApi = await fetch(`${REACT_APP_API_URL}/delete/${task._id}`, {
+        const taskApi = await fetch(`${REACT_APP_API_URL}/${task._id}`, {
           method: "DELETE",
         });
         const taskData = await taskApi.json();
@@ -75,7 +75,7 @@ function Tasks(props) {
     });
   };
   const updateTaskAPI = async (task) => {
-    const taskApi = await fetch(`${REACT_APP_API_URL}/update`, {
+    const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
       method: "PUT",
       body: JSON.stringify({
         _id: task._id,
@@ -121,12 +121,14 @@ function Tasks(props) {
                 </ButtonWrapper>
               </GridColumn>
             </Grid>
-            {errors && errors.length && (
+            {errors && errors.length ? (
               <ul className="validation">
                 {errors.map((error) => (
                   <li>{error.msg}</li>
                 ))}
               </ul>
+            ) : (
+              ""
             )}
           </Page>
         </form>

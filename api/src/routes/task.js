@@ -11,10 +11,10 @@ const {
 router.get("/", list);
 router.get("/completed", list);
 router.post(
-  "/create",
+  "/",
   [body("title").isLength(10).not().isEmpty().trim().escape()],
   create
 );
-router.put("/update", update);
-router.delete("/delete/:id", deleteItem);
+router.put("/", update);
+router.delete("/:id", deleteItem);
 module.exports = router;

@@ -18,7 +18,7 @@ function createKey(input) {
 function Tasks(props) {
   const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks`;
   const [tasks, setTasks] = useState([]);
-
+  const title = (props.type ? props.type : "Todo") + "| Engz";
   const Wrapper = styled.div`
     min-width: 600px;
   `;
@@ -89,7 +89,7 @@ function Tasks(props) {
   };
 
   useEffect(() => {
-    document.title = `${props.type} | Engz`;
+    document.title = title.toUpperCase();
     getTasks();
   }, [`${REACT_APP_API_URL}/${props.type}`]);
 

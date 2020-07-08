@@ -84,6 +84,7 @@ function Tasks(props) {
   };
 
   useEffect(() => {
+    document.title = `${props.type} | Engz`;
     getTasks();
   }, [`${REACT_APP_API_URL}/${props.type}`]);
 

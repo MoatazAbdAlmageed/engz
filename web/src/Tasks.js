@@ -18,7 +18,8 @@ function createKey(input) {
 function Tasks(props) {
   const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks`;
   const [tasks, setTasks] = useState([]);
-  const title = (props.type ? props.type : "Todo") + "| Engz";
+  const [errors, setErrors] = useState([]);
+  const title = `(${tasks.length}) ` + (props.type ? props.type : "Todo");
   const Wrapper = styled.div`
     min-width: 600px;
   `;
@@ -32,14 +33,19 @@ function Tasks(props) {
     setTasks(tasksArray);
   };
 
-  const saveTaskAPI = async (task) => {
+  const createTaskAPI = async (task) => {
     const taskApi = await fetch(`${REACT_APP_API_URL}/create`, {
       method: "POST",
       body: JSON.stringify({ title: task }),
       headers: { "Content-Type": "application/json" },
     });
     const taskData = await taskApi.json();
+    // todo set errors
+    if (taskData.errors) {
+      setErrors(taskData.errors);
+    }
     if (taskData.statusCode === 200) {
+      setErrors([]);
       Swal.fire("Created!", "Task has been created.", "success");
       getTasks();
     }
@@ -89,20 +95,22 @@ function Tasks(props) {
   };
 
   useEffect(() => {
-    document.title = title.toUpperCase();
+    document.title = title.toUpperCase() + " | Engz";
     getTasks();
   }, [`${REACT_APP_API_URL}/${props.type}`]);
 
   // todo move TaskForm to another component
   const TaskForm = () => (
-    <Form onSubmit={(data) => saveTaskAPI(data.task)}>
+    <Form onSubmit={(data) => createTaskAPI(data.task)}>
       {({ formProps }) => (
         <form {...formProps}>
           <Page>
             <Grid>
               <GridColumn medium={8}>
                 <Field name="task" defaultValue="" label="Task" isRequired>
-                  {({ fieldProps }) => <TextField {...fieldProps} />}
+                  {({ fieldProps }) => (
+                    <TextField minlength={10} {...fieldProps} />
+                  )}
                 </Field>{" "}
               </GridColumn>
               <GridColumn medium={4}>
@@ -113,6 +121,13 @@ function Tasks(props) {
                 </ButtonWrapper>
               </GridColumn>
             </Grid>
+            {errors && errors.length && (
+              <ul className="validation">
+                {errors.map((error) => (
+                  <li>{error.msg}</li>
+                ))}
+              </ul>
+            )}
           </Page>
         </form>
       )}
@@ -233,7 +248,7 @@ function Tasks(props) {
   return (
     <>
       {!props.type && <TaskForm />}
-      <h2 className="uppercase">{props.type} tasks</h2>
+      <h2 className="uppercase">{title} tasks</h2>
 
       <Wrapper>
         <DynamicTable

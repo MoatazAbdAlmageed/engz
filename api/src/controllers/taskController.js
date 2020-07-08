@@ -1,6 +1,15 @@
 const Task = require("../models/task");
+const { validationResult } = require("express-validator");
+
 const create = (req, res, next) => {
   const { title } = req.body;
+
+  // Finds the validation errors in this request and wraps them in an object with handy functions
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).json({ errors: errors.array() });
+  }
+
   //todo use express validation
   Task.create([{ title: title.trim(), status: false }])
     .then((task) => {

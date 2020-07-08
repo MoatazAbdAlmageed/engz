@@ -20,6 +20,7 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.6.0",
     "lodash": "^4.17.15",
     "method-override": "^3.0.0",
     "moment": "^2.27.0",

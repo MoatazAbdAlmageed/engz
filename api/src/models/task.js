@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const searchable = require("mongoose-regex-search");
 const taskSchema = new mongoose.Schema(
   {
     title: {
@@ -14,5 +13,5 @@ const taskSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-taskSchema.plugin(searchable);
+
 module.exports = mongoose.model("Task", taskSchema);

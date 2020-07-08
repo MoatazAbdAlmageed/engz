@@ -24,7 +24,7 @@ const list = (req, res) => {
 
   const completed = path == "/completed/" ? true : false;
   console.log();
-  tasks = Task.search(query.title)
+  tasks = Task.find({ title: { $regex: query.title } })
     .sort({ createdAt: -1 })
     .where({ status: completed ? true : false })
     .then((tasks) => {

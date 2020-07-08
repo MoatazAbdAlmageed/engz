@@ -8,7 +8,7 @@ import Moment from "react-moment";
 import InlineEdit from "@atlaskit/inline-edit";
 import { fontSize, gridSize } from "@atlaskit/theme";
 import Textfield from "@atlaskit/textfield";
-
+import Page, { Grid, GridColumn } from "@atlaskit/page";
 import Swal from "sweetalert2";
 
 function createKey(input) {
@@ -20,6 +20,10 @@ function Tasks(props) {
 
   const Wrapper = styled.div`
     min-width: 600px;
+  `;
+
+  const ButtonWrapper = styled.div`
+    margin-top: 1.9em;
   `;
   const getTasks = async () => {
     const tasksApi = await fetch(`${REACT_APP_API_URL}/${props.type}`);
@@ -93,12 +97,22 @@ function Tasks(props) {
     <Form onSubmit={(data) => saveTaskAPI(data.task)}>
       {({ formProps }) => (
         <form {...formProps}>
-          <Field name="task" defaultValue="" label="Task" isRequired>
-            {({ fieldProps }) => <TextField {...fieldProps} />}
-          </Field>
-          <Button type="submit" appearance="primary">
-            Submit
-          </Button>
+          <Page>
+            <Grid>
+              <GridColumn medium={8}>
+                <Field name="task" defaultValue="" label="Task" isRequired>
+                  {({ fieldProps }) => <TextField {...fieldProps} />}
+                </Field>{" "}
+              </GridColumn>
+              <GridColumn medium={4}>
+                <ButtonWrapper>
+                  <Button type="submit" appearance="primary">
+                    Submit
+                  </Button>{" "}
+                </ButtonWrapper>
+              </GridColumn>
+            </Grid>
+          </Page>
         </form>
       )}
     </Form>

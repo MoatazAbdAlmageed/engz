@@ -97,6 +97,7 @@ function Tasks(props) {
         _id: task._id,
         title: task.title,
         status: task.status,
+        label: { title: task.label.title },
       }),
       headers: {
         Accept: "application/json",
@@ -213,6 +214,10 @@ function Tasks(props) {
         content: "Title",
       },
       {
+        key: "label",
+        content: "Label",
+      },
+      {
         key: "createdAt",
         content: "createdAt",
       },
@@ -266,6 +271,29 @@ function Tasks(props) {
                 )}
                 onConfirm={(value) => {
                   updateTaskAPI({ ...task, title: value });
+                }}
+              />{" "}
+            </div>
+          ),
+          isSortable: true,
+        },
+        {
+          key: createKey(task.label ? task.label.title : task._id),
+          content: task.labels && task.labels.length && (
+            <div>
+              {" "}
+              <InlineEdit
+                defaultValue={task.labels[0].title}
+                editView={(fieldProps) => (
+                  <TextField {...fieldProps} autoFocus />
+                )}
+                readView={() =>
+                  task.labels.map((label) => (
+                    <ReadViewContainer>{label.title}</ReadViewContainer>
+                  ))
+                }
+                onConfirm={(value) => {
+                  // updateTaskAPI({ ...task, label: { title: value } });
                 }}
               />{" "}
             </div>

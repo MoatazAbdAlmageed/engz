@@ -1,17 +1,17 @@
-const Task = require("../models/task");
+const Task = require("../models/taskModel");
+const Label = require("../models/labelModel");
 const { validationResult } = require("express-validator");
 
 const create = (req, res, next) => {
-  const { title } = req.body;
-
+  const { title, labels } = req.body;
   // Finds the validation errors in this request and wraps them in an object with handy functions
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
-
-  Task.create([{ title, status: false }])
+  Task.create({ title, labels, status: false })
     .then((task) => {
+      task.labels.push(labels);
       res
         .status(200)
         .json({ statusCode: 200, message: "task created!", payload: task });
@@ -26,12 +26,22 @@ const list = (req, res) => {
   tasks = Task.find({ title: { $regex: query.title } })
     .sort({ createdAt: -1 })
     .where({ status: completed ? true : false })
+    .populate("labels")
     .then((tasks) => {
       res.status(200).send(tasks);
     });
+  // tasks = Task
+  //   .label
+  //   // { title: { $regex: query.title } }
+  //   ()
+  //   .sort({ createdAt: -1 })
+  //   .where({ status: completed ? true : false })
+  //   .then((tasks) => {
+  //     res.status(200).send(tasks);
+  //   });
 };
 const update = (req, res) => {
-  const { _id, title, status } = req.body;
+  const { _id, title, status, label } = req.body;
   if (!title) {
     res.status(400).json({ statusCode: 400, message: "title required!" });
   }
@@ -39,7 +49,8 @@ const update = (req, res) => {
     { _id },
     {
       title: title.trim(),
-      status, // todo update this (get status from )
+      status,
+      label,
     },
     { new: true }
   ).then((task) => {

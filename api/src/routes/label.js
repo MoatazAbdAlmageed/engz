@@ -7,12 +7,11 @@ const {
   list,
   update,
   deleteItem,
-} = require("../controllers/taskController");
+} = require("../controllers/labelController");
 router.get("/", list);
-router.get("/completed", list); //DELETE THIS
 router.post(
   "/",
-  [body("title").isLength(10).not().isEmpty().trim().escape()],
+  [body("title").isLength(5).not().isEmpty().trim().escape()],
   create
 );
 router.put("/", update);

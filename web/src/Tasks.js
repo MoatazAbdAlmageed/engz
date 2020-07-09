@@ -109,10 +109,17 @@ function Tasks(props) {
       let newTasks = tasks.map((p) =>
         p._id === taskData.payload._id ? { ...taskData.payload } : p
       );
+
       // remove task if marked as completed
-      if (taskData.payload.status) {
+      if (props.type == "" && taskData.payload.status) {
         newTasks = newTasks.filter(function (el) {
           return el.status == false;
+        });
+      }
+      // remove task if marked as uncompleted
+      if (props.type == "completed" && !taskData.payload.status) {
+        newTasks = newTasks.filter(function (el) {
+          return el.status == true;
         });
       }
       setTasks(newTasks);

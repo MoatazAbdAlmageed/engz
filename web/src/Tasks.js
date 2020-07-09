@@ -54,7 +54,10 @@ function Tasks(props) {
     if (taskData.statusCode === 200) {
       setErrors([]);
       Swal.fire("Created!", "Task has been created.", "success");
-      getTasks();
+
+      tasks.unshift(taskData.payload[0]);
+      setTasks(tasks);
+      setLoading(false);
     }
   };
 
@@ -77,7 +80,11 @@ function Tasks(props) {
         const taskData = await taskApi.json();
         if (taskData.statusCode === 200) {
           Swal.fire("Deleted!", "Task has been deleted.", "success");
-          getTasks();
+          const newTasks = tasks.filter(function (tas) {
+            return tas._id !== task._id;
+          });
+          setTasks(newTasks);
+          setLoading(false);
         }
       }
     });
@@ -99,7 +106,17 @@ function Tasks(props) {
     const taskData = await taskApi.json();
     if (taskData.statusCode === 200) {
       Swal.fire("Updated!", "Task has been updated.", "success");
-      getTasks();
+      let newTasks = tasks.map((p) =>
+        p._id === taskData.payload._id ? { ...taskData.payload } : p
+      );
+      // remove task if marked as completed
+      if (taskData.payload.status) {
+        newTasks = newTasks.filter(function (el) {
+          return el.status == false;
+        });
+      }
+      setTasks(newTasks);
+      setLoading(false);
     }
   };
 

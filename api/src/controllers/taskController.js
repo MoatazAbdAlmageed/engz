@@ -10,8 +10,7 @@ const create = (req, res, next) => {
     return res.status(422).json({ errors: errors.array() });
   }
 
-  //todo use express validation
-  Task.create([{ title: title.trim(), status: false }])
+  Task.create([{ title, status: false }])
     .then((task) => {
       res
         .status(200)
@@ -42,18 +41,16 @@ const update = (req, res) => {
       title: title.trim(),
       status, // todo update this (get status from )
     },
-    { new: true },
-    (err, task) => {
-      console.log();
-      if (err) {
-        res.send(err);
-      } else {
-        res
-          .status(200)
-          .json({ statusCode: 200, message: "task updated!", payload: task });
-      }
-    }
-  );
+    { new: true }
+  ).then((task) => {
+    console.log("🚀🚀🚀🚀🚀🚀 task");
+    console.log(task);
+    console.log("----------------------------------------------------");
+    console.log();
+    res
+      .status(200)
+      .json({ statusCode: 200, message: "task updated!", payload: task });
+  });
 };
 const deleteItem = (req, res) => {
   Task.findByIdAndDelete(req.params.id).then(() => {

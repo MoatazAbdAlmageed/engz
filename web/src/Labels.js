@@ -16,12 +16,11 @@ import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
-function Tasks(props) {
-  const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks`;
-  const [tasks, setTasks] = useState([]);
+function Labels(props) {
+  const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/labels`;
+  const [labels, setLabels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
-  const title = `(${tasks.length}) ` + (props.type ? props.type : "Todo");
   const Wrapper = styled.div`
     min-width: 600px;
   `;
@@ -29,21 +28,19 @@ function Tasks(props) {
   const ButtonWrapper = styled.div`
     margin-top: 1.9em;
   `;
-  const getTasks = async (search = "") => {
+  const getLabels = async (search = "") => {
     setLoading(true);
-    const tasksApi = await fetch(
-      `${REACT_APP_API_URL}/${props.type}/?title=${search}`
-    );
-    const tasksArray = await tasksApi.json();
-    setTasks(tasksArray);
+    const labelsApi = await fetch(`${REACT_APP_API_URL}/?title=${search}`);
+    const labelsArray = await labelsApi.json();
+    setLabels(labelsArray);
     setLoading(false);
   };
 
-  const createTaskAPI = async (task) => {
+  const createTaskAPI = async (label) => {
     setLoading(true);
     const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
       method: "POST",
-      body: JSON.stringify({ title: task }),
+      body: JSON.stringify({ title: label }),
       headers: { "Content-Type": "application/json" },
     });
     const taskData = await taskApi.json();
@@ -53,16 +50,16 @@ function Tasks(props) {
     }
     if (taskData.statusCode === 200) {
       setErrors([]);
-      Swal.fire("Created!", "Task has been created.", "success");
+      Swal.fire("Created!", "Label has been created.", "success");
 
-      tasks.unshift(taskData.payload[0]);
-      setTasks(tasks);
+      labels.unshift(taskData.payload[0]);
+      setLabels(labels);
     }
     setLoading(false);
   };
 
   // todo use this
-  const deleteTaskAPI = (task) => {
+  const deleteTaskAPI = (label) => {
     Swal.fire({
       title: "Are you sure?",
       text: "You won't be able to revert this!",
@@ -74,30 +71,30 @@ function Tasks(props) {
     }).then(async (result) => {
       if (result.value) {
         setLoading(true);
-        const taskApi = await fetch(`${REACT_APP_API_URL}/${task._id}`, {
+        const taskApi = await fetch(`${REACT_APP_API_URL}/${label._id}`, {
           method: "DELETE",
         });
         const taskData = await taskApi.json();
         if (taskData.statusCode === 200) {
-          Swal.fire("Deleted!", "Task has been deleted.", "success");
-          const newTasks = tasks.filter(function (tas) {
-            return tas._id !== task._id;
+          Swal.fire("Deleted!", "Label has been deleted.", "success");
+          const newLabels = labels.filter(function (_lable) {
+            return _lable._id !== label._id;
           });
-          setTasks(newTasks);
+          setLabels(newLabels);
         }
         setLoading(false);
       }
     });
   };
-  const updateTaskAPI = async (task) => {
+  const updateTaskAPI = async (label) => {
     setLoading(true);
     const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
       method: "PUT",
       body: JSON.stringify({
-        _id: task._id,
-        title: task.title,
-        status: task.status,
-        // labels: task.labels, todo
+        _id: label._id,
+        title: label.title,
+        status: label.status,
+        // labels: label.labels, todo
       }),
       headers: {
         Accept: "application/json",
@@ -106,44 +103,44 @@ function Tasks(props) {
     });
     const taskData = await taskApi.json();
     if (taskData.statusCode === 200) {
-      Swal.fire("Updated!", "Task has been updated.", "success");
-      let newTasks = tasks.map((p) =>
+      Swal.fire("Updated!", "Label has been updated.", "success");
+      let newLabels = labels.map((p) =>
         p._id === taskData.payload._id ? { ...taskData.payload } : p
       );
 
-      // remove task if marked as completed
+      // remove label if marked as completed
       if (props.type == "" && taskData.payload.status) {
-        newTasks = newTasks.filter(function (el) {
+        newLabels = newLabels.filter(function (el) {
           return el.status == false;
         });
       }
-      // remove task if marked as uncompleted
+      // remove label if marked as uncompleted
       if (props.type == "completed" && !taskData.payload.status) {
-        newTasks = newTasks.filter(function (el) {
+        newLabels = newLabels.filter(function (el) {
           return el.status == true;
         });
       }
-      setTasks(newTasks);
+      setLabels(newLabels);
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    document.title = title.toUpperCase() + " | Engz";
-    getTasks();
+    document.title = 'Labels" | Engz ';
+    getLabels();
   }, [`${REACT_APP_API_URL}/${props.type}`]);
 
   const SearchForm = () => (
     <Form
       onSubmit={(data) => {
-        getTasks(data.search);
+        getLabels(data.search);
       }}
     >
       {({ formProps }) => (
         <form {...formProps}>
           <Field name="search" defaultValue="" label="Search" isRequired>
             {({ fieldProps }) => (
-              <TextField placeholder="search task" {...fieldProps} />
+              <TextField placeholder="search label" {...fieldProps} />
             )}
           </Field>{" "}
         </form>
@@ -151,20 +148,20 @@ function Tasks(props) {
     </Form>
   );
 
-  // todo move TaskForm to another component
-  const TaskForm = () => (
-    <Form onSubmit={(data) => createTaskAPI(data.task)}>
+  // todo move LabelForm to another component
+  const LabelForm = () => (
+    <Form onSubmit={(data) => createTaskAPI(data.label)}>
       {({ formProps }) => (
         <form {...formProps}>
           <Page>
             <Grid>
               <GridColumn medium={12}>
-                <h2>Create New Task</h2>
+                <h2>Create New Label</h2>
               </GridColumn>
             </Grid>
             <Grid>
               <GridColumn medium={8}>
-                <Field name="task" defaultValue="" label="Task" isRequired>
+                <Field name="label" defaultValue="" label="Label" isRequired>
                   {({ fieldProps }) => (
                     <TextField minlength={10} {...fieldProps} />
                   )}
@@ -232,20 +229,20 @@ function Tasks(props) {
     ],
   };
   const rows =
-    tasks.length &&
-    tasks.map((task) => ({
-      key: createKey(task._id),
+    labels.length &&
+    labels.map((label) => ({
+      key: createKey(label._id),
       cells: [
         {
           key: createKey("check"),
           content: (
             <p>
               <Checkbox
-                defaultChecked={task.status ? " checked" : ""}
+                defaultChecked={label.status ? " checked" : ""}
                 onChange={(e) => {
                   updateTaskAPI({
-                    ...task,
-                    status: !task.status,
+                    ...label,
+                    status: !label.status,
                   });
                 }}
                 name="checkbox-basic"
@@ -255,22 +252,22 @@ function Tasks(props) {
           isSortable: true,
         },
         {
-          key: createKey(task.title),
+          key: createKey(label.title),
           content: (
             <div>
               {" "}
               <InlineEdit
-                defaultValue={task.title}
+                defaultValue={label.title}
                 editView={(fieldProps) => (
                   <TextField {...fieldProps} autoFocus />
                 )}
                 readView={() => (
                   <ReadViewContainer>
-                    {task.title || "Click to enter value"}
+                    {label.title || "Click to enter value"}
                   </ReadViewContainer>
                 )}
                 onConfirm={(value) => {
-                  updateTaskAPI({ ...task, title: value });
+                  updateTaskAPI({ ...label, title: value });
                 }}
               />{" "}
             </div>
@@ -279,11 +276,13 @@ function Tasks(props) {
         },
         {
           key: createKey(
-            task.labels && task.labels.length ? task.labels[0].title : task._id
+            label.labels && label.labels.length
+              ? label.labels[0].title
+              : label._id
           ),
-          content: task.labels && task.labels.length && (
+          content: label.labels && label.labels.length && (
             <ul>
-              {task.labels.map((label) => (
+              {label.labels.map((label) => (
                 // todo use badge component
                 <li>{label.title}</li>
               ))}
@@ -292,28 +291,28 @@ function Tasks(props) {
           isSortable: true,
         },
         {
-          key: createKey(task.createdAt),
+          key: createKey(label.createdAt),
           content: (
             <p>
-              <Moment fromNow>{task.createdAt}</Moment>
+              <Moment fromNow>{label.createdAt}</Moment>
             </p>
           ),
           isSortable: true,
         },
         {
-          key: createKey(task.updatedAt),
+          key: createKey(label.updatedAt),
           content: (
             <p>
-              <Moment fromNow>{task.updatedAt}</Moment>
+              <Moment fromNow>{label.updatedAt}</Moment>
             </p>
           ),
           isSortable: true,
         },
         {
-          key: createKey(task._id),
+          key: createKey(label._id),
           content: (
             <p>
-              <Button appearance="danger" onClick={() => deleteTaskAPI(task)}>
+              <Button appearance="danger" onClick={() => deleteTaskAPI(label)}>
                 Delete
               </Button>
             </p>
@@ -330,8 +329,8 @@ function Tasks(props) {
         </>
       ) : (
         <>
-          {!props.type && <TaskForm />}
-          <h2 className="uppercase">{title} tasks</h2>
+          {!props.type && <LabelForm />}
+          <h2> {labels.length} Labels</h2>
 
           <SearchForm />
 
@@ -356,4 +355,4 @@ function Tasks(props) {
   );
 }
 
-export default Tasks;
+export default Labels;

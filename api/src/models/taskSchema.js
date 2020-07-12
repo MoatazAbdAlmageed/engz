@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
-const labelSchema = require("./labelSchema");
+const uniqueValidator = require("mongoose-unique-validator");
 
 const taskSchema = new mongoose.Schema(
   {
     title: {
       type: String,
       required: true,
+      unique: true,
       searchable: true,
     },
     status: {
@@ -16,5 +17,6 @@ const taskSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+taskSchema.plugin(uniqueValidator);
 
 module.exports = taskSchema;

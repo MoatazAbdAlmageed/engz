@@ -7,8 +7,10 @@ const {
   list,
   update,
   deleteItem,
+  tasksByLabel,
 } = require("../controllers/taskController");
 router.get("/", list);
+router.get("/label/:id", tasksByLabel);
 router.get("/completed", list); //DELETE THIS
 router.post(
   "/",

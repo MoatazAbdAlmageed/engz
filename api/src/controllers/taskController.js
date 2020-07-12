@@ -2,16 +2,34 @@ const Task = require("../models/taskModel");
 const Label = require("../models/labelModel");
 const { validationResult } = require("express-validator");
 
-const create = (req, res, next) => {
-  const { title, labels } = req.body;
-  // Finds the validation errors in this request and wraps them in an object with handy functions
+const create = async (req, res, next) => {
+  const { title } = req.body;
+  let { labels } = req.body;
   const errors = validationResult(req);
+
+  /**
+   * If no labels passed , attach general label
+   */
+  if (!labels) {
+    await Label.findOne({ title: "General" }).then((label) => {
+      if (label) {
+        labels = [label._id];
+      } else {
+        // todo kill process (no need to reach Task.create)
+        res.status(500).json({ statusCode: 500, message: "labels required!" });
+      }
+    });
+  }
+
+  //
+  // let labels = ["5f07426405ae1d51bc8d6432", "5f07408578dc82224c912eaf"]; // temp todo get label from req.body
+  // Finds the validation errors in this request and wraps them in an object with handy functions
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
   Task.create({ title, labels, status: false })
-    .then((task) => {
-      task.labels.push(labels);
+    .then(async (task) => {
+      // todo get labels [object] instead of [ids ]
       res
         .status(200)
         .json({ statusCode: 200, message: "task created!", payload: task });
@@ -22,7 +40,6 @@ const list = (req, res) => {
   const { path, query } = req;
 
   const completed = path == "/completed/" ? true : false;
-  console.log();
   tasks = Task.find({ title: { $regex: query.title } })
     .sort({ createdAt: -1 })
     .where({ status: completed ? true : false })
@@ -40,6 +57,17 @@ const list = (req, res) => {
   //     res.status(200).send(tasks);
   //   });
 };
+
+const tasksByLabel = async (req, res) => {
+  const { id } = req.params;
+  const label = await Label.findById(id).populate("tasks");
+  console.log("🚀🚀🚀🚀🚀🚀 label");
+  console.log(label);
+  console.log("----------------------------------------------------");
+  console.log();
+  res.send(label.tasks);
+};
+
 const update = (req, res) => {
   const { _id, title, status, label } = req.body;
   if (!title) {
@@ -68,4 +96,4 @@ const deleteItem = (req, res) => {
     res.status(200).json({ statusCode: 200, message: "task deleted!" });
   });
 };
-module.exports = { create, list, update, deleteItem };
+module.exports = { create, list, update, deleteItem, tasksByLabel };

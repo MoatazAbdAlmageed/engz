@@ -39,11 +39,10 @@ app.use("/api", routes);
  * Error handler middleware
  */
 app.use((err, req, res, next) => {
-  console.log("🚀🚀🚀🚀🚀🚀 err.stack");
-  console.log(err.stack);
+  console.log(err);
   console.log("----------------------------------------------------");
   console.log();
-  res.status(500).send("Something broke!");
+  res.status(500).send(err.message);
 });
 
 app.use((req, res, next) => {

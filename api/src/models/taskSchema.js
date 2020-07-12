@@ -15,8 +15,11 @@ const taskSchema = new mongoose.Schema(
     },
     labels: [{ type: mongoose.Schema.Types.ObjectId, ref: "Label" }],
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+  }
 );
-taskSchema.plugin(uniqueValidator);
 
+
+taskSchema.plugin(uniqueValidator);
 module.exports = taskSchema;

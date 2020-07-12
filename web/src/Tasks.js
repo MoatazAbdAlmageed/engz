@@ -55,7 +55,7 @@ function Tasks(props) {
       setErrors([]);
       Swal.fire("Created!", "Task has been created.", "success");
 
-      tasks.unshift(taskData.payload[0]);
+      tasks.unshift(taskData.payload);
       setTasks(tasks);
     }
     setLoading(false);

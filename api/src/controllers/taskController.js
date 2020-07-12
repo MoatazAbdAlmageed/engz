@@ -27,6 +27,7 @@ const create = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(422).json({ errors: errors.array() });
   }
+
   Task.create({ title, labels, status: false })
     .then(async (task) => {
       // todo get labels [object] instead of [ids ]
@@ -47,15 +48,6 @@ const list = (req, res) => {
     .then((tasks) => {
       res.status(200).send(tasks);
     });
-  // tasks = Task
-  //   .label
-  //   // { title: { $regex: query.title } }
-  //   ()
-  //   .sort({ createdAt: -1 })
-  //   .where({ status: completed ? true : false })
-  //   .then((tasks) => {
-  //     res.status(200).send(tasks);
-  //   });
 };
 
 const tasksByLabel = async (req, res) => {
@@ -71,6 +63,7 @@ const tasksByLabel = async (req, res) => {
 const update = (req, res) => {
   const { _id, title, status, label } = req.body;
   if (!title) {
+    //todo test and remove this validation
     res.status(400).json({ statusCode: 400, message: "title required!" });
   }
   Task.findByIdAndUpdate(
@@ -82,10 +75,6 @@ const update = (req, res) => {
     },
     { new: true }
   ).then((task) => {
-    console.log("🚀🚀🚀🚀🚀🚀 task");
-    console.log(task);
-    console.log("----------------------------------------------------");
-    console.log();
     res
       .status(200)
       .json({ statusCode: 200, message: "task updated!", payload: task });

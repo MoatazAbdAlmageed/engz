@@ -52,7 +52,7 @@ function Labels(props) {
       setErrors([]);
       Swal.fire("Created!", "Label has been created.", "success");
 
-      labels.unshift(taskData.payload[0]);
+      labels.unshift(taskData.payload);
       setLabels(labels);
     }
     setLoading(false);
@@ -163,7 +163,7 @@ function Labels(props) {
               <GridColumn medium={8}>
                 <Field name="label" defaultValue="" label="Label" isRequired>
                   {({ fieldProps }) => (
-                    <TextField minlength={10} {...fieldProps} />
+                    <TextField minlength={5} {...fieldProps} />
                   )}
                 </Field>{" "}
               </GridColumn>
@@ -203,16 +203,12 @@ function Labels(props) {
   const head = {
     cells: [
       {
-        key: "Check",
-        content: "Check",
-      },
-      {
         key: "title",
         content: "Title",
       },
       {
-        key: "label",
-        content: "Label",
+        key: "tasks",
+        content: "Tasks",
       },
       {
         key: "createdAt",
@@ -233,24 +229,6 @@ function Labels(props) {
     labels.map((label) => ({
       key: createKey(label._id),
       cells: [
-        {
-          key: createKey("check"),
-          content: (
-            <p>
-              <Checkbox
-                defaultChecked={label.status ? " checked" : ""}
-                onChange={(e) => {
-                  updateTaskAPI({
-                    ...label,
-                    status: !label.status,
-                  });
-                }}
-                name="checkbox-basic"
-              />
-            </p>
-          ),
-          isSortable: true,
-        },
         {
           key: createKey(label.title),
           content: (
@@ -275,19 +253,8 @@ function Labels(props) {
           isSortable: true,
         },
         {
-          key: createKey(
-            label.labels && label.labels.length
-              ? label.labels[0].title
-              : label._id
-          ),
-          content: label.labels && label.labels.length && (
-            <ul>
-              {label.labels.map((label) => (
-                // todo use badge component
-                <li>{label.title}</li>
-              ))}
-            </ul>
-          ),
+          key: createKey(label._id),
+          content: <p>{label.tasks && label.tasks.length}</p>,
           isSortable: true,
         },
         {

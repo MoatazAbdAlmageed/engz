@@ -22,9 +22,11 @@ ReactDOM.render(
             </li>{" "}
             <li>
               <Link to="/tasks">Tasks</Link>
-            </li>
-            <li>
-              <Link to="/completed-tasks">Completed Tasks</Link>
+              <ul>
+                <li>
+                  <Link to="/completed-tasks">Completed Tasks</Link>
+                </li>
+              </ul>
             </li>
           </ul>
         </nav>

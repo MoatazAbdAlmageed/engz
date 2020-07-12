@@ -9,14 +9,21 @@ const labelSchema = new mongoose.Schema(
       unique: true,
       default: "General",
     },
-    // tasks: [
-    //   {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: "Task",
-    //   },
-    // ],
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: {
+      virtuals: true,
+    },
+  }
 );
+
+labelSchema.virtual("tasks", {
+  ref: "Task",
+  localField: "_id",
+  foreignField: "labels",
+});
+
+
 labelSchema.plugin(uniqueValidator);
 module.exports = labelSchema;

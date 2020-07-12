@@ -9,47 +9,45 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 require("dotenv").config();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/labels">Labels</Link>
-            </li>{" "}
-            <li>
-              <Link to="/tasks">Tasks</Link>
-              <ul>
-                <li>
-                  <Link to="/completed-tasks">Completed Tasks</Link>
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </nav>
+  <Router>
+    <div>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+            <Link to="/labels">Labels</Link>
+          </li>{" "}
+          <li>
+            <Link to="/tasks">Tasks</Link>
+            <ul>
+              <li>
+                <Link to="/completed-tasks">Completed Tasks</Link>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
 
-        {/* A <Switch> looks through its children <Route>s and
+      {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-        <Switch>
-          <Route exact={true} path="/labels">
-            <Labels />
-          </Route>{" "}
-          <Route exact={true} path="/tasks">
-            <Tasks type="" />
-          </Route>{" "}
-          <Route exact={true} path="/completed-tasks">
-            <Tasks type="completed" />
-          </Route>
-          <Route path="/">
-            <App />
-          </Route>
-        </Switch>
-      </div>
-    </Router>
-  </React.StrictMode>,
+      <Switch>
+        <Route exact={true} path="/labels">
+          <Labels />
+        </Route>{" "}
+        <Route exact={true} path="/tasks">
+          <Tasks type="" />
+        </Route>{" "}
+        <Route exact={true} path="/completed-tasks">
+          <Tasks type="completed" />
+        </Route>
+        <Route path="/">
+          <App />
+        </Route>
+      </Switch>
+    </div>
+  </Router>,
   document.getElementById("root")
 );
 

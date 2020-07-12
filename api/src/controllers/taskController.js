@@ -15,7 +15,7 @@ const create = async (req, res, next) => {
       if (label) {
         labels = [label._id];
       } else {
-        // todo kill process (no need to reach Task.create)
+        // todo kill process (no not need to reach Task.create)
         res.status(500).json({ statusCode: 500, message: "labels required!" });
       }
     });

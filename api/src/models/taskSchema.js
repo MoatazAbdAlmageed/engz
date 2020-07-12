@@ -20,6 +20,5 @@ const taskSchema = new mongoose.Schema(
   }
 );
 
-
 taskSchema.plugin(uniqueValidator);
 module.exports = taskSchema;

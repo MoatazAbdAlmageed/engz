@@ -24,6 +24,5 @@ labelSchema.virtual("tasks", {
   foreignField: "labels",
 });
 
-
 labelSchema.plugin(uniqueValidator);
 module.exports = labelSchema;

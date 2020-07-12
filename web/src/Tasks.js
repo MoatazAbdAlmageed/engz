@@ -12,13 +12,21 @@ import Swal from "sweetalert2";
 import { Checkbox, CheckboxIcon } from "@atlaskit/checkbox";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Badge from "@atlaskit/badge";
+import DropdownMenu, {
+  DropdownItemGroupCheckbox,
+  DropdownItemCheckbox,
+} from "@atlaskit/dropdown-menu";
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
 function Tasks(props) {
-  const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/tasks`;
+  const endpoint = `${process.env.REACT_APP_API_URL}`;
+  const tasksEndpoint = `${endpoint}/tasks`;
+  const labelsEndpoint = `${endpoint}/labels`;
   const [tasks, setTasks] = useState([]);
+  const [labels, setLabels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const title = `(${tasks.length}) ` + (props.type ? props.type : "Todo");
@@ -29,10 +37,20 @@ function Tasks(props) {
   const ButtonWrapper = styled.div`
     margin-top: 1.9em;
   `;
+  const getLabels = async (search = "") => {
+    setLoading(true);
+    const labelApi = await fetch(
+      `${labelsEndpoint}/${props.type}/?title=${search}`
+    );
+    const labelsArray = await labelApi.json();
+    setLabels(labelsArray);
+    setLoading(false);
+  };
+
   const getTasks = async (search = "") => {
     setLoading(true);
     const tasksApi = await fetch(
-      `${REACT_APP_API_URL}/${props.type}/?title=${search}`
+      `${tasksEndpoint}/${props.type}/?title=${search}`
     );
     const tasksArray = await tasksApi.json();
     setTasks(tasksArray);
@@ -40,25 +58,28 @@ function Tasks(props) {
   };
 
   const createTaskAPI = async (task) => {
+    console.log("🚀🚀🚀🚀🚀🚀 task");
+    console.log(task);
+    console.log("----------------------------------------------------");
+    console.log();
     setLoading(true);
-    const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
+    const taskApi = await fetch(`${tasksEndpoint}/`, {
       method: "POST",
-      body: JSON.stringify({ title: task }),
+      body: JSON.stringify({ title: task.title, labels: task.labels }),
       headers: { "Content-Type": "application/json" },
     });
+    setLoading(false);
+
     const taskData = await taskApi.json();
-    // todo set errors
     if (taskData.errors) {
       setErrors(taskData.errors);
     }
     if (taskData.statusCode === 200) {
       setErrors([]);
       Swal.fire("Created!", "Task has been created.", "success");
-
       tasks.unshift(taskData.payload);
       setTasks(tasks);
     }
-    setLoading(false);
   };
 
   // todo use this
@@ -74,7 +95,7 @@ function Tasks(props) {
     }).then(async (result) => {
       if (result.value) {
         setLoading(true);
-        const taskApi = await fetch(`${REACT_APP_API_URL}/${task._id}`, {
+        const taskApi = await fetch(`${tasksEndpoint}/${task._id}`, {
           method: "DELETE",
         });
         const taskData = await taskApi.json();
@@ -91,7 +112,7 @@ function Tasks(props) {
   };
   const updateTaskAPI = async (task) => {
     setLoading(true);
-    const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
+    const taskApi = await fetch(`${tasksEndpoint}/`, {
       method: "PUT",
       body: JSON.stringify({
         _id: task._id,
@@ -128,10 +149,14 @@ function Tasks(props) {
     }
   };
 
-  useEffect(() => {
+  const listLabels = useEffect(() => {
+    getLabels();
+  }, [`${labelsEndpoint}`]);
+
+  const listTasks = useEffect(() => {
     document.title = title.toUpperCase() + " | Engz";
     getTasks();
-  }, [`${REACT_APP_API_URL}/${props.type}`]);
+  }, [`${tasksEndpoint}/${props.type}`]);
 
   const SearchForm = () => (
     <Form
@@ -153,7 +178,7 @@ function Tasks(props) {
 
   // todo move TaskForm to another component
   const TaskForm = () => (
-    <Form onSubmit={(data) => createTaskAPI(data.task)}>
+    <Form onSubmit={(data) => createTaskAPI(data)}>
       {({ formProps }) => (
         <form {...formProps}>
           <Page>
@@ -163,14 +188,36 @@ function Tasks(props) {
               </GridColumn>
             </Grid>
             <Grid>
-              <GridColumn medium={8}>
-                <Field name="task" defaultValue="" label="Task" isRequired>
+              <GridColumn medium={7}>
+                <Field name="title" defaultValue="" label="Title" isRequired>
                   {({ fieldProps }) => (
                     <TextField minlength={10} {...fieldProps} />
                   )}
                 </Field>{" "}
               </GridColumn>
-              <GridColumn medium={4}>
+              <GridColumn medium={3}>
+                <Field name="labels" defaultValue="" label="Labels" isRequired>
+                  {({ fieldProps }) => (
+                    <DropdownMenu
+                      trigger="labels"
+                      triggerType="button"
+                      {...fieldProps}
+                    >
+                      {labels &&
+                        labels.length &&
+                        labels.map((label) => (
+                          <DropdownItemCheckbox
+                            isSelected={true}
+                            id={label._id}
+                          >
+                            {label.title}
+                          </DropdownItemCheckbox>
+                        ))}
+                    </DropdownMenu>
+                  )}
+                </Field>{" "}
+              </GridColumn>{" "}
+              <GridColumn medium={2}>
                 <ButtonWrapper>
                   <Button type="submit" appearance="primary">
                     Submit
@@ -181,7 +228,7 @@ function Tasks(props) {
             {errors && errors.length ? (
               <ul className="validation">
                 {errors.map((error) => (
-                  <li>{error.msg}</li>
+                  <li key={error.msg}>{error.msg}</li>
                 ))}
               </ul>
             ) : (
@@ -284,8 +331,9 @@ function Tasks(props) {
           content: task.labels && task.labels.length && (
             <ul>
               {task.labels.map((label) => (
-                // todo use badge component
-                <li>{label.title}</li>
+                <li key={label._id}>
+                  <Badge>{label.title}</Badge>
+                </li>
               ))}
             </ul>
           ),

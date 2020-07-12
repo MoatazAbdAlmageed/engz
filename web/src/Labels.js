@@ -12,12 +12,15 @@ import Swal from "sweetalert2";
 import { Checkbox, CheckboxIcon } from "@atlaskit/checkbox";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Badge from "@atlaskit/badge";
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
 function Labels(props) {
-  const REACT_APP_API_URL = `${process.env.REACT_APP_API_URL}/labels`;
+  const endpoint = `${process.env.REACT_APP_API_URL}`;
+  const labelsEndpoint = `${endpoint}/labels`;
+
   const [labels, setLabels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -30,7 +33,7 @@ function Labels(props) {
   `;
   const getLabels = async (search = "") => {
     setLoading(true);
-    const labelsApi = await fetch(`${REACT_APP_API_URL}/?title=${search}`);
+    const labelsApi = await fetch(`${labelsEndpoint}/?title=${search}`);
     const labelsArray = await labelsApi.json();
     setLabels(labelsArray);
     setLoading(false);
@@ -38,7 +41,7 @@ function Labels(props) {
 
   const createTaskAPI = async (label) => {
     setLoading(true);
-    const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
+    const taskApi = await fetch(`${labelsEndpoint}/`, {
       method: "POST",
       body: JSON.stringify({ title: label }),
       headers: { "Content-Type": "application/json" },
@@ -71,7 +74,7 @@ function Labels(props) {
     }).then(async (result) => {
       if (result.value) {
         setLoading(true);
-        const taskApi = await fetch(`${REACT_APP_API_URL}/${label._id}`, {
+        const taskApi = await fetch(`${labelsEndpoint}/${label._id}`, {
           method: "DELETE",
         });
         const taskData = await taskApi.json();
@@ -88,7 +91,7 @@ function Labels(props) {
   };
   const updateTaskAPI = async (label) => {
     setLoading(true);
-    const taskApi = await fetch(`${REACT_APP_API_URL}/`, {
+    const taskApi = await fetch(`${labelsEndpoint}/`, {
       method: "PUT",
       body: JSON.stringify({
         _id: label._id,
@@ -128,7 +131,7 @@ function Labels(props) {
   useEffect(() => {
     document.title = 'Labels" | Engz ';
     getLabels();
-  }, [`${REACT_APP_API_URL}/${props.type}`]);
+  }, [`${labelsEndpoint}/${props.type}`]);
 
   const SearchForm = () => (
     <Form
@@ -178,7 +181,7 @@ function Labels(props) {
             {errors && errors.length ? (
               <ul className="validation">
                 {errors.map((error) => (
-                  <li>{error.msg}</li>
+                  <li key={error.msg}>{error.msg}</li>
                 ))}
               </ul>
             ) : (
@@ -254,7 +257,7 @@ function Labels(props) {
         },
         {
           key: createKey(label._id),
-          content: <p>{label.tasks && label.tasks.length}</p>,
+          content: <Badge>{label.tasks && label.tasks.length}</Badge>,
           isSortable: true,
         },
         {

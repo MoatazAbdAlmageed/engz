@@ -378,7 +378,7 @@ function Tasks(props) {
         </>
       ) : (
         <>
-          {!props.type && <TaskForm />}
+          <TaskForm />
           <h2 className="uppercase">{title} tasks</h2>
 
           <SearchForm />

@@ -6,28 +6,33 @@ import Tasks from "./Tasks";
 import Labels from "./Labels";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
+
 require("dotenv").config();
 ReactDOM.render(
   <Router>
     <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/">Home</Link>
-          </li>
-          <li>
-            <Link to="/labels">Labels</Link>
-          </li>{" "}
-          <li>
-            <Link to="/tasks">Tasks</Link>
-            <ul>
-              <li>
-                <Link to="/completed-tasks">Completed Tasks</Link>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
+      <Navbar bg="light" expand="lg">
+        <Navbar.Brand as={Link} to="/tasks">
+          Engz
+        </Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Nav.Link as={Link} to="/labels">
+              Labels
+            </Nav.Link>
+            <Nav.Link as={Link} to="/tasks">
+              Tasks
+            </Nav.Link>
+            <Nav.Link as={Link} to="/completed-tasks">
+              Completed Tasks
+            </Nav.Link>
+          </Nav>
+        </Navbar.Collapse>
+      </Navbar>
 
       {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}

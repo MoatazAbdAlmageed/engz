@@ -183,12 +183,10 @@ function Tasks(props) {
         <form {...formProps}>
           <Page>
             <Grid>
-              <GridColumn medium={12}>
-                <h2>Create New Task</h2>
+              <GridColumn medium={3}>
+                <h4 className="gray">Create New Task</h4>
               </GridColumn>
-            </Grid>
-            <Grid>
-              <GridColumn medium={7}>
+              <GridColumn medium={4}>
                 <Field name="title" defaultValue="" label="Title" isRequired>
                   {({ fieldProps }) => (
                     <TextField minlength={10} {...fieldProps} />
@@ -379,7 +377,7 @@ function Tasks(props) {
       ) : (
         <>
           <TaskForm />
-          <h2 className="uppercase">{title} tasks</h2>
+          <h4 className="uppercase gray">{title} tasks</h4>
 
           <SearchForm />
 

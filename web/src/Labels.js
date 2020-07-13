@@ -158,12 +158,10 @@ function Labels(props) {
         <form {...formProps}>
           <Page>
             <Grid>
-              <GridColumn medium={12}>
-                <h2>Create New Label</h2>
+              <GridColumn medium={3}>
+                <h4 className="gray">Create New Label</h4>
               </GridColumn>
-            </Grid>
-            <Grid>
-              <GridColumn medium={8}>
+              <GridColumn medium={4}>
                 <Field name="label" defaultValue="" label="Label" isRequired>
                   {({ fieldProps }) => (
                     <TextField minlength={5} {...fieldProps} />
@@ -300,7 +298,7 @@ function Labels(props) {
       ) : (
         <>
           {!props.type && <LabelForm />}
-          <h2> {labels.length} Labels</h2>
+          <h4 className="gray"> {labels.length} Labels</h4>
 
           <SearchForm />
 

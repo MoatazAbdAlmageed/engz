@@ -164,7 +164,7 @@ function Labels(props) {
               <GridColumn medium={4}>
                 <Field name="label" defaultValue="" label="Label" isRequired>
                   {({ fieldProps }) => (
-                    <TextField minlength={5} {...fieldProps} />
+                    <TextField minLength={5} {...fieldProps} />
                   )}
                 </Field>{" "}
               </GridColumn>
@@ -311,8 +311,6 @@ function Labels(props) {
               loadingSpinnerSize="large"
               isLoading={false}
               isFixedSize
-              defaultSortKey="term"
-              defaultSortOrder="ASC"
               onSort={() => console.log("onSort")}
               onSetPage={() => console.log("onSetPage")}
             />

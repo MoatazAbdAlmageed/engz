@@ -9,7 +9,7 @@ import InlineEdit from "@atlaskit/inline-edit";
 import { fontSize, gridSize } from "@atlaskit/theme";
 import Page, { Grid, GridColumn } from "@atlaskit/page";
 import Swal from "sweetalert2";
-import { Checkbox, CheckboxIcon } from "@atlaskit/checkbox";
+import { Checkbox } from "@atlaskit/checkbox";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Badge from "@atlaskit/badge";
@@ -68,7 +68,6 @@ function Tasks(props) {
       body: JSON.stringify({ title: task.title, labels: task.labels }),
       headers: { "Content-Type": "application/json" },
     });
-    setLoading(false);
 
     const taskData = await taskApi.json();
     if (taskData.errors) {
@@ -79,6 +78,7 @@ function Tasks(props) {
       Swal.fire("Created!", "Task has been created.", "success");
       tasks.unshift(taskData.payload);
       setTasks(tasks);
+      setLoading(false);
     }
   };
 
@@ -177,67 +177,106 @@ function Tasks(props) {
   );
 
   // todo move TaskForm to another component
-  const TaskForm = () => (
-    <Form onSubmit={(data) => createTaskAPI(data)}>
-      {({ formProps }) => (
-        <form {...formProps}>
-          <Page>
-            <Grid>
-              <GridColumn medium={3}>
-                <h4 className="gray">Create New Task</h4>
-              </GridColumn>
-              <GridColumn medium={4}>
-                <Field name="title" defaultValue="" label="Title" isRequired>
-                  {({ fieldProps }) => (
-                    <TextField minlength={10} {...fieldProps} />
-                  )}
-                </Field>{" "}
-              </GridColumn>
-              <GridColumn medium={3}>
-                <Field name="labels" defaultValue="" label="Labels" isRequired>
-                  {({ fieldProps }) => (
-                    <DropdownMenu
-                      trigger="labels"
-                      triggerType="button"
-                      {...fieldProps}
-                    >
-                      {labels &&
-                        labels.length &&
-                        labels.map((label) => (
-                          <DropdownItemCheckbox
-                            isSelected={true}
-                            id={label._id}
-                          >
-                            {label.title}
-                          </DropdownItemCheckbox>
-                        ))}
-                    </DropdownMenu>
-                  )}
-                </Field>{" "}
-              </GridColumn>{" "}
-              <GridColumn medium={2}>
-                <ButtonWrapper>
-                  <Button type="submit" appearance="primary">
-                    Submit
-                  </Button>{" "}
-                </ButtonWrapper>
-              </GridColumn>
-            </Grid>
-            {errors && errors.length ? (
-              <ul className="validation">
-                {errors.map((error) => (
-                  <li key={error.msg}>{error.msg}</li>
-                ))}
-              </ul>
-            ) : (
-              ""
-            )}
-          </Page>
-        </form>
-      )}
-    </Form>
-  );
+  const TaskForm = (props) => {
+    const [selectedLabels, setSelectedLabels] = useState([]);
+    return (
+      <Form onSubmit={(data) => createTaskAPI(data)}>
+        {({ formProps }) => (
+          <form {...formProps}>
+            <Page>
+              <Grid>
+                <GridColumn medium={3}>
+                  <h4 className="gray">Create New Task</h4>
+                </GridColumn>
+                <GridColumn medium={4}>
+                  <Field name="title" defaultValue="" label="Title" isRequired>
+                    {({ fieldProps }) => (
+                      <TextField minLength={10} {...fieldProps} />
+                    )}
+                  </Field>{" "}
+                </GridColumn>
+                <GridColumn medium={3}>
+                  <Field
+                    name="labels"
+                    defaultValue=""
+                    label="Labels"
+                    isRequired
+                  >
+                    {({ fieldProps }) => (
+                      <DropdownMenu
+                        triggerButtonProps={{
+                          appearance:
+                            selectedLabels.length > 0 ? "primary" : "default",
+                        }}
+                        trigger="Labels"
+                        triggerType="button"
+                        {...fieldProps}
+                      >
+                        <DropdownItemGroupCheckbox id="labels">
+                          {labels &&
+                            labels.length &&
+                            labels.map((label) => {
+                              const indexInSelected = selectedLabels.indexOf(
+                                label._id
+                              );
+                              const isSelected = indexInSelected !== -1;
 
+                              const setLabels = () => {
+                                console.log("onClick");
+                                alert("ddddddddddddddd");
+                                if (isSelected) {
+                                  setSelectedLabels([
+                                    ...selectedLabels.slice(0, indexInSelected),
+                                    ...selectedLabels.slice(
+                                      indexInSelected + 1
+                                    ),
+                                  ]);
+                                } else {
+                                  setSelectedLabels([
+                                    ...selectedLabels,
+                                    label._id,
+                                  ]);
+                                }
+                              };
+                              return (
+                                <DropdownItemCheckbox
+                                  key={label._id}
+                                  id={label._id}
+                                  onClick={setLabels}
+                                  isSelected={isSelected}
+                                >
+                                  {label.title}
+                                </DropdownItemCheckbox>
+                              );
+                            })}
+                        </DropdownItemGroupCheckbox>
+                      </DropdownMenu>
+                    )}
+                  </Field>{" "}
+                </GridColumn>{" "}
+                <GridColumn medium={2}>
+                  <ButtonWrapper>
+                    <Button type="submit" appearance="primary">
+                      Submit
+                    </Button>{" "}
+                  </ButtonWrapper>
+                </GridColumn>
+              </Grid>
+              {errors && errors.length ? (
+                <ul className="validation">
+                  {errors.map((error) => (
+                    <li key={error.msg}>{error.msg}</li>
+                  ))}
+                </ul>
+              ) : (
+                ""
+              )}
+            </Page>
+          </form>
+        )}
+      </Form>
+    );
+  };
   const ReadViewContainer = styled.div`
     display: flex;
     font-size: ${fontSize()}px;
@@ -390,8 +429,6 @@ function Tasks(props) {
               loadingSpinnerSize="large"
               isLoading={false}
               isFixedSize
-              defaultSortKey="term"
-              defaultSortOrder="ASC"
               onSort={() => console.log("onSort")}
               onSetPage={() => console.log("onSetPage")}
             />

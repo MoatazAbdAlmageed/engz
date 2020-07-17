@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import Tasks from "./Tasks";
-import Labels from "./Labels";
+import Tasks from "./components/task/Tasks";
+import Labels from "./components/label/Labels";
 import * as serviceWorker from "./serviceWorker";
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";

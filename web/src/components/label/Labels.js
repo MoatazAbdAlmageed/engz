@@ -14,6 +14,7 @@ import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Badge from "@atlaskit/badge";
 import SearchForm from "./SearchForm";
+import LabelForm from "./LabelForm";
 import ReadViewContainer from "../shared/ReadViewContainer";
 
 function createKey(input) {
@@ -30,9 +31,6 @@ function Labels(props) {
     min-width: 600px;
   `;
 
-  const ButtonWrapper = styled.div`
-    margin-top: 1.9em;
-  `;
   const getLabels = async (search = "") => {
     setLoading(true);
     const labelsApi = await fetch(`${labelsEndpoint}/?title=${search}`);
@@ -135,46 +133,6 @@ function Labels(props) {
     getLabels();
   }, [`${labelsEndpoint}/${props.type}`]);
 
-  // todo move LabelForm to another component
-  const LabelForm = () => (
-    <Form onSubmit={(data) => createTaskAPI(data.label)}>
-      {({ formProps }) => (
-        <form {...formProps}>
-          <Page>
-            <Grid>
-              <GridColumn medium={3}>
-                <h4 className="gray">Create New Label</h4>
-              </GridColumn>
-              <GridColumn medium={4}>
-                <Field name="label" defaultValue="" label="Label" isRequired>
-                  {({ fieldProps }) => (
-                    <TextField minLength={5} {...fieldProps} />
-                  )}
-                </Field>{" "}
-              </GridColumn>
-              <GridColumn medium={4}>
-                <ButtonWrapper>
-                  <Button type="submit" appearance="primary">
-                    Submit
-                  </Button>{" "}
-                </ButtonWrapper>
-              </GridColumn>
-            </Grid>
-            {errors && errors.length ? (
-              <ul className="validation">
-                {errors.map((error) => (
-                  <li key={error.msg}>{error.msg}</li>
-                ))}
-              </ul>
-            ) : (
-              ""
-            )}
-          </Page>
-        </form>
-      )}
-    </Form>
-  );
-
   const head = {
     cells: [
       {
@@ -271,7 +229,9 @@ function Labels(props) {
         </>
       ) : (
         <>
-          {!props.type && <LabelForm />}
+          {!props.type && (
+            <LabelForm createTaskAPI={createTaskAPI} errors={errors} />
+          )}
           <h4 className="gray"> {labels.length} Labels</h4>
 
           <SearchForm getLabels={getLabels} />

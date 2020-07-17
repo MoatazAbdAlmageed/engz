@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from "@atlaskit/button";
 import TextField from "@atlaskit/textfield";
 import styled from "styled-components";
@@ -10,6 +10,7 @@ import { Checkbox } from "@atlaskit/checkbox";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Badge from "@atlaskit/badge";
 import ReadViewContainer from "../shared/ReadViewContainer";
+import Wrapper from "../shared/Wrapper";
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
@@ -17,9 +18,7 @@ function createKey(input) {
 function TasksList({ setLoading, type, tasks, setTasks }) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
   const tasksEndpoint = `${endpoint}/tasks`;
-  const Wrapper = styled.div`
-    min-width: 600px;
-  `;
+
 
   // todo use this
   const deleteTaskAPI = (task) => {

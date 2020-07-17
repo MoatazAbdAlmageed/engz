@@ -19,7 +19,6 @@ function TasksList({ setLoading, type, tasks, setTasks }) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
   const tasksEndpoint = `${endpoint}/tasks`;
 
-
   // todo use this
   const deleteTaskAPI = (task) => {
     Swal.fire({

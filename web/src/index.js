@@ -15,7 +15,7 @@ ReactDOM.render(
   <Router>
     <div>
       <Navbar bg="light" expand="lg">
-        <Navbar.Brand as={Link} to="/tasks">
+        <Navbar.Brand as={Link} to="/">
           Engz
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />

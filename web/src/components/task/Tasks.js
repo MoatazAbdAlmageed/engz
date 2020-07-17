@@ -84,6 +84,7 @@ function Tasks(props) {
           <SearchForm getTasks={getTasks} />
 
           <TasksList
+            type={props.type}
             tasks={tasks}
             setTasks={setTasks}
             setLoading={setLoading}

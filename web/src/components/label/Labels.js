@@ -13,6 +13,8 @@ import { Checkbox, CheckboxIcon } from "@atlaskit/checkbox";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Badge from "@atlaskit/badge";
+import SearchForm from "./SearchForm";
+import ReadViewContainer from "../shared/ReadViewContainer";
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
@@ -133,24 +135,6 @@ function Labels(props) {
     getLabels();
   }, [`${labelsEndpoint}/${props.type}`]);
 
-  const SearchForm = () => (
-    <Form
-      onSubmit={(data) => {
-        getLabels(data.search);
-      }}
-    >
-      {({ formProps }) => (
-        <form {...formProps}>
-          <Field name="search" defaultValue="" label="Search" isRequired>
-            {({ fieldProps }) => (
-              <TextField placeholder="search label" {...fieldProps} />
-            )}
-          </Field>{" "}
-        </form>
-      )}
-    </Form>
-  );
-
   // todo move LabelForm to another component
   const LabelForm = () => (
     <Form onSubmit={(data) => createTaskAPI(data.label)}>
@@ -190,16 +174,6 @@ function Labels(props) {
       )}
     </Form>
   );
-
-  const ReadViewContainer = styled.div`
-    display: flex;
-    font-size: ${fontSize()}px;
-    line-height: ${(gridSize() * 2.5) / fontSize()};
-    max-width: 100%;
-    min-height: ${(gridSize() * 2.5) / fontSize()}em;
-    padding: ${gridSize()}px ${gridSize() - 2}px;
-    word-break: break-word;
-  `;
 
   const head = {
     cells: [
@@ -300,7 +274,7 @@ function Labels(props) {
           {!props.type && <LabelForm />}
           <h4 className="gray"> {labels.length} Labels</h4>
 
-          <SearchForm />
+          <SearchForm getLabels={getLabels} />
 
           <Wrapper>
             <DynamicTable

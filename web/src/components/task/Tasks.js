@@ -6,13 +6,14 @@ import styled from "styled-components";
 import DynamicTable from "@atlaskit/dynamic-table";
 import Moment from "react-moment";
 import InlineEdit from "@atlaskit/inline-edit";
-import { fontSize, gridSize } from "@atlaskit/theme";
 import Page, { Grid, GridColumn } from "@atlaskit/page";
 import Swal from "sweetalert2";
 import { Checkbox } from "@atlaskit/checkbox";
 import Loader from "react-loader-spinner";
 import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Badge from "@atlaskit/badge";
+import SearchForm from "./SearchForm";
+import ReadViewContainer from "../shared/ReadViewContainer";
 import DropdownMenu, {
   DropdownItemGroupCheckbox,
   DropdownItemCheckbox,
@@ -158,24 +159,6 @@ function Tasks(props) {
     getTasks();
   }, [`${tasksEndpoint}/${props.type}`]);
 
-  const SearchForm = () => (
-    <Form
-      onSubmit={(data) => {
-        getTasks(data.search);
-      }}
-    >
-      {({ formProps }) => (
-        <form {...formProps}>
-          <Field name="search" defaultValue="" label="Search" isRequired>
-            {({ fieldProps }) => (
-              <TextField placeholder="search task" {...fieldProps} />
-            )}
-          </Field>{" "}
-        </form>
-      )}
-    </Form>
-  );
-
   // todo move TaskForm to another component
   const TaskForm = (props) => {
     const [selectedLabels, setSelectedLabels] = useState([]);
@@ -277,15 +260,6 @@ function Tasks(props) {
       </Form>
     );
   };
-  const ReadViewContainer = styled.div`
-    display: flex;
-    font-size: ${fontSize()}px;
-    line-height: ${(gridSize() * 2.5) / fontSize()};
-    max-width: 100%;
-    min-height: ${(gridSize() * 2.5) / fontSize()}em;
-    padding: ${gridSize()}px ${gridSize() - 2}px;
-    word-break: break-word;
-  `;
 
   const head = {
     cells: [
@@ -418,7 +392,7 @@ function Tasks(props) {
           <TaskForm />
           <h4 className="uppercase gray">{title} tasks</h4>
 
-          <SearchForm />
+          <SearchForm getTasks={getTasks} />
 
           <Wrapper>
             <DynamicTable

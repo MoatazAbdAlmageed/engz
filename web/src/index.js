@@ -9,11 +9,12 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import Wrapper from "./components/shared/Wrapper";
 
 require("dotenv").config();
 ReactDOM.render(
   <Router>
-    <div>
+    <Wrapper>
       <Navbar bg="light" expand="lg">
         <Navbar.Brand as={Link} to="/">
           Engz
@@ -50,7 +51,7 @@ ReactDOM.render(
           <App />
         </Route>
       </Switch>
-    </div>
+    </Wrapper>
   </Router>,
   document.getElementById("root")
 );

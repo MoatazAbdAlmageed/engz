@@ -59,10 +59,8 @@ function Labels(props) {
           {!props.type && (
             <LabelForm createTaskAPI={createTaskAPI} errors={errors} />
           )}
-          <h4 className="gray"> {labels.length} Labels</h4>
-
+          <h4 className="gray"> Labels ({labels.length}) </h4>
           <SearchForm getLabels={getLabels} />
-
           <LabelsList
             labels={labels}
             setLabels={setLabels}

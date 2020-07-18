@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./App.css";
-import { OrangeHeading, StyledHeading } from "./components/styled/Heading";
+import { OrangeHeading } from "./components/styled/Heading";
 
 function App() {
+  useEffect(() => {
+    document.title = "Home | Engz".toUpperCase();
+  });
+
   return (
     <div className="App">
       <header className="App-header">

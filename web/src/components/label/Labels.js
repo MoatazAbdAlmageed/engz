@@ -44,7 +44,7 @@ function Labels(props) {
   };
 
   useEffect(() => {
-    document.title = 'Labels" | Engz ';
+    document.title = "Labels | Engz".toUpperCase();
     getLabels();
   }, [`${labelsEndpoint}/${props.type}`]);
 

@@ -49,7 +49,7 @@ const TaskForm = ({ createTaskAPI, errors, labels }) => {
 
                             const setLabels = () => {
                               console.log("onClick");
-                              alert("ddddddddddddddd");
+                              alert("why not working !!");
                               if (isSelected) {
                                 setSelectedLabels([
                                   ...selectedLabels.slice(0, indexInSelected),
@@ -81,7 +81,7 @@ const TaskForm = ({ createTaskAPI, errors, labels }) => {
               <GridColumn medium={2}>
                 <ButtonWrapper>
                   <Button type="submit" appearance="primary">
-                    Submit
+                    Create
                   </Button>{" "}
                 </ButtonWrapper>
               </GridColumn>

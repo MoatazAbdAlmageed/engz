@@ -13,7 +13,6 @@ function Tasks(props) {
   const [labels, setLabels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
-  const title = `(${tasks.length}) ` + (props.type ? props.type : "Todo");
   const getLabels = async (search = "") => {
     setLoading(true);
     const labelApi = await fetch(
@@ -60,7 +59,8 @@ function Tasks(props) {
   }, [`${labelsEndpoint}`]);
 
   useEffect(() => {
-    document.title = title.toUpperCase() + " | Engz";
+    const title = `${props.type} Tasks | Engz`;
+    document.title = title.toUpperCase();
     getTasks();
   }, [`${tasksEndpoint}/${props.type}`]);
 
@@ -78,7 +78,10 @@ function Tasks(props) {
             labels={labels}
           />
 
-          <h4 className="uppercase gray">{title} tasks</h4>
+          <h4 className="uppercase gray">
+            {" "}
+            {props.type} Tasks ({tasks.length}){" "}
+          </h4>
 
           <SearchForm getTasks={getTasks} />
 

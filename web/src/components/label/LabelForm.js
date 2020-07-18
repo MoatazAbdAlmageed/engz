@@ -3,7 +3,7 @@ import Form, { Field } from "@atlaskit/form";
 import TextField from "@atlaskit/textfield";
 import Page, { Grid, GridColumn } from "@atlaskit/page";
 import Button from "@atlaskit/button";
-import ButtonWrapper from "../shared/ButtonWrapper";
+import ButtonWrapper from "../styled/ButtonWrapper";
 
 const LabelForm = ({ createTaskAPI, errors }) => (
   <Form onSubmit={(data) => createTaskAPI(data.label)}>

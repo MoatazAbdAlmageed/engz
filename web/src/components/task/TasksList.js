@@ -1,16 +1,14 @@
 import React from "react";
 import Button from "@atlaskit/button";
 import TextField from "@atlaskit/textfield";
-import styled from "styled-components";
 import DynamicTable from "@atlaskit/dynamic-table";
 import Moment from "react-moment";
 import InlineEdit from "@atlaskit/inline-edit";
 import Swal from "sweetalert2";
 import { Checkbox } from "@atlaskit/checkbox";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Badge from "@atlaskit/badge";
-import ReadViewContainer from "../shared/ReadViewContainer";
-import Wrapper from "../shared/Wrapper";
+import ReadViewContainer from "../styled/ReadViewContainer";
+import Wrapper from "../styled/Wrapper";
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
@@ -70,15 +68,15 @@ function TasksList({ setLoading, type, tasks, setTasks }) {
       );
 
       // remove task if marked as completed
-      if (type == "" && taskData.payload.status) {
+      if (type === "" && taskData.payload.status) {
         newTasks = newTasks.filter(function (el) {
-          return el.status == false;
+          return el.status === false;
         });
       }
       // remove task if marked as uncompleted
-      if (type == "completed" && !taskData.payload.status) {
+      if (type === "completed" && !taskData.payload.status) {
         newTasks = newTasks.filter(function (el) {
-          return el.status == true;
+          return el.status === true;
         });
       }
       setTasks(newTasks);

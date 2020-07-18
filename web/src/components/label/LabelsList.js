@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from "@atlaskit/button";
 import TextField from "@atlaskit/textfield";
 import DynamicTable from "@atlaskit/dynamic-table";
 import Moment from "react-moment";
 import InlineEdit from "@atlaskit/inline-edit";
 import Swal from "sweetalert2";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import Badge from "@atlaskit/badge";
-import ReadViewContainer from "../shared/ReadViewContainer";
-import Wrapper from "../shared/Wrapper";
+import ReadViewContainer from "../styled/ReadViewContainer";
+import Wrapper from "../styled/Wrapper";
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;

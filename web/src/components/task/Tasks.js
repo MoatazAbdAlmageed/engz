@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import Loader from "react-loader-spinner";
-import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
 import SearchForm from "./SearchForm";
 import TaskForm from "./TaskForm";
 import TasksList from "./TasksList";

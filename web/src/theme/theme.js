@@ -1,0 +1,23 @@
+export default {
+  colors: {
+    primary: "#f44336",
+    color1: "#e91e63",
+    color2: "#9c27b0",
+    color3: "#673ab7",
+    color4: "#3f51b5",
+    color5: "#2196f3",
+    color6: "#03a9f4",
+    color7: "#00bcd4",
+    color8: "#009688",
+    color9: "#4caf50",
+    color10: "#cddc39",
+    color11: "#ffeb3b",
+    color12: "#ff9800",
+    color13: "#ff5722",
+    color14: "#795548",
+    color15: "#9e9e9e",
+    color16: "#607d8b",
+    gray: "#eee",
+    dark: "#253858",
+  },
+};

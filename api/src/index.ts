@@ -1,4 +1,4 @@
-const express = require("express");
+import express from "express";
 const app = express();
 const cors = require("cors");
 // const tasks = fs.readFileSync("./data/tasks.json", "utf8"); //todo get it from db
@@ -7,8 +7,8 @@ const bodyParser = require("body-parser");
 const moment = require("moment");
 const methodOverride = require("method-override");
 require("dotenv").config();
-const routes = require("./src/routes");
-const { connection } = require("./src/db");
+const routes = require("./routes");
+const { connection } = require("./db");
 
 app.use(cors());
 app.use(bodyParser.json());

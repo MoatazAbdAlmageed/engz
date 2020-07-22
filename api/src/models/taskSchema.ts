@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
+import mongoose from "mongoose";
+import uniqueValidator from "mongoose-unique-validator";
 
 const taskSchema = new mongoose.Schema(
   {
@@ -21,4 +21,4 @@ const taskSchema = new mongoose.Schema(
 );
 
 taskSchema.plugin(uniqueValidator);
-module.exports = taskSchema;
+export default taskSchema;

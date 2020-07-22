@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
+import mongoose from "mongoose";
+import uniqueValidator from "mongoose-unique-validator";
 
 const labelSchema = new mongoose.Schema(
   {
@@ -25,4 +25,4 @@ labelSchema.virtual("tasks", {
 });
 
 labelSchema.plugin(uniqueValidator);
-module.exports = labelSchema;
+export default labelSchema;

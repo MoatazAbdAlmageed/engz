@@ -4,8 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "node index.js",
-    "watch": "nodemon --watch  index.js   --watch 'src/**'   --exec yarn start:dev"
+    "start": "node dist/index",
+    "build": "yarn  tsc",
+    "start:dev": "yarn build && yarn start",
+    "watch": "nodemon -e ts,json --exec yarn start:dev"
   },
   "keywords": [],
   "author": "",
@@ -21,7 +23,7 @@
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-validator": "^6.6.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "method-override": "^3.0.0",
     "moment": "^2.27.0",
     "mongoose": "^5.9.21",

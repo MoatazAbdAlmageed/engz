@@ -1,13 +1,13 @@
 import * as graphql from "graphql";
 import LabelSchema from "./LabelSchema";
 
-const { GraphQLObjectType, GraphQLString, GraphQLList } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLID } = graphql;
 
 const TaskSchema = new GraphQLObjectType({
   name: "Task",
   fields: () => ({
     id: {
-      type: GraphQLString,
+      type: GraphQLID,
     },
     title: {
       type: GraphQLString,

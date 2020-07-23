@@ -1,7 +1,8 @@
 import * as graphql from "graphql";
 import TaskSchema from "./TaskSchema";
 import * as _ from "lodash";
-const { GraphQLObjectType, GraphQLString, GraphQLSchema } = graphql;
+import LabelSchema from "./LabelSchema";
+const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID } = graphql;
 const labels = [
   { id: "1", title: "label 1" },
   { id: "2", title: "label 2" },
@@ -16,19 +17,28 @@ const tasks = [
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
-    task: {
-      type: TaskSchema,
+    label: {
+      type: LabelSchema,
       args: {
         id: {
-          type: GraphQLString,
+          type: GraphQLID,
         },
       },
       resolve(parent, args) {
         // todo get from db
-        const task = _.find(tasks, { id: args.id });
-        console.log(task);
-
-        return task;
+        return _.find(labels, { id: args.id });
+      },
+    },
+    task: {
+      type: TaskSchema,
+      args: {
+        id: {
+          type: GraphQLID,
+        },
+      },
+      resolve(parent, args) {
+        // todo get from db
+        return _.find(tasks, { id: args.id });
       },
     },
   },

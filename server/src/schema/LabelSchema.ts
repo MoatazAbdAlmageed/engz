@@ -1,12 +1,12 @@
 import * as graphql from "graphql";
 
-const { GraphQLObjectType, GraphQLString } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLID } = graphql;
 
 const LabelSchema = new GraphQLObjectType({
   name: "Label",
   fields: () => ({
     id: {
-      type: GraphQLString,
+      type: GraphQLID,
     },
     title: {
       type: GraphQLString,

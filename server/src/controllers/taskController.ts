@@ -45,7 +45,7 @@ export default class TaskController implements IController {
 
     const completed = path === "/completed/" ? true : false;
     Task.find({ title: { $regex: query.title } })
-      .where({ status: completed ? true : false })
+      // .where({ status: completed ? true : false })
       .sort({ updatedAt: -1 })
       .populate("labels")
       .then((tasks) => {

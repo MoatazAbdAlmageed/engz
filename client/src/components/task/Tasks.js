@@ -5,7 +5,7 @@ import SearchForm from "./SearchForm";
 import TaskForm from "./TaskForm";
 import TasksList from "./TasksList";
 import Page, { Grid, GridColumn } from "@atlaskit/page";
-
+import * as _ from "lodash";
 function Tasks(props) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
   const tasksEndpoint = `${endpoint}/tasks`;
@@ -28,11 +28,14 @@ function Tasks(props) {
     const tasksApi = await fetch(`${tasksEndpoint}/${type}/?title=${search}`);
     const tasksArray = await tasksApi.json();
 
-    if (type === "completed") {
-      setCompletedTasks(tasksArray);
-    } else {
-      setTasks(tasksArray);
-    }
+    // if (type === "completed") {
+    //   setCompletedTasks(tasksArray);
+    // } else {
+    // }
+    const tasks = _.filter(tasksArray, { status: false });
+    const completed = _.filter(tasksArray, { status: true });
+    setTasks(tasks);
+    setCompletedTasks(completed);
 
     setLoading(false);
   };
@@ -66,7 +69,7 @@ function Tasks(props) {
     const title = `${props.type} Tasks | Engz`;
     document.title = title.toUpperCase();
     getTasks();
-    getTasks("completed");
+    // getTasks("completed");
   }, [`${tasksEndpoint}/${props.type}`]);
 
   return (
@@ -98,7 +101,7 @@ function Tasks(props) {
                 type="completed-tasks"
                 tasks={completedTasks}
                 rowsPerPage={10}
-                setTasks={setTasks}
+                setTasks={setCompletedTasks}
                 setLoading={setLoading}
               />
             </GridColumn>

@@ -4,11 +4,6 @@
 
 ```
 yarn install-packages  | npm run install-packages
+yarn server
+yarn client
 ```
-
-## TODO
-
-- use lerna
-- add graphql
-- remove bootstrap
-- create user (signup/login) # may I will try okta

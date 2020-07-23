@@ -8,12 +8,11 @@ import Swal from "sweetalert2";
 import { Checkbox } from "@atlaskit/checkbox";
 import Badge from "@atlaskit/badge";
 import ReadViewContainer from "../styled/ReadViewContainer";
-import Wrapper from "../styled/Wrapper";
-
+import TrashIcon from "@atlaskit/icon/glyph/trash";
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
-function TasksList({ setLoading, type, tasks, setTasks }) {
+function TasksList({ setLoading, type, tasks, setTasks, rowsPerPage = 5 }) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
   const tasksEndpoint = `${endpoint}/tasks`;
 
@@ -95,18 +94,6 @@ function TasksList({ setLoading, type, tasks, setTasks }) {
         content: "Title",
       },
       {
-        key: "label",
-        content: "Label",
-      },
-      {
-        key: "createdAt",
-        content: "createdAt",
-      },
-      {
-        key: "updatedAt",
-        content: "updatedAt",
-      },
-      {
         key: "DeleteAction",
         content: "Delete?",
       },
@@ -158,44 +145,16 @@ function TasksList({ setLoading, type, tasks, setTasks }) {
           ),
           isSortable: true,
         },
-        {
-          key: createKey(
-            task.labels && task.labels.length ? task.labels[0].title : task._id
-          ),
-          content: task.labels && task.labels.length && (
-            <ul>
-              {task.labels.map((label) => (
-                <li key={label._id}>
-                  <Badge>{label.title}</Badge>
-                </li>
-              ))}
-            </ul>
-          ),
-          isSortable: true,
-        },
-        {
-          key: createKey(task.createdAt),
-          content: (
-            <p>
-              <Moment fromNow>{task.createdAt}</Moment>
-            </p>
-          ),
-          isSortable: true,
-        },
-        {
-          key: createKey(task.updatedAt),
-          content: (
-            <p>
-              <Moment fromNow>{task.updatedAt}</Moment>
-            </p>
-          ),
-          isSortable: true,
-        },
+
         {
           key: createKey(task._id),
           content: (
             <p>
-              <Button appearance="danger" onClick={() => deleteTaskAPI(task)}>
+              <Button
+                iconBefore={TrashIcon}
+                appearance="danger"
+                onClick={() => deleteTaskAPI(task)}
+              >
                 Delete
               </Button>
             </p>
@@ -206,19 +165,17 @@ function TasksList({ setLoading, type, tasks, setTasks }) {
     }));
   return (
     <>
-      <Wrapper>
-        <DynamicTable
-          head={head}
-          rows={rows}
-          rowsPerPage={5}
-          defaultPage={1}
-          loadingSpinnerSize="large"
-          isLoading={false}
-          isFixedSize
-          onSort={() => console.log("onSort")}
-          onSetPage={() => console.log("onSetPage")}
-        />
-      </Wrapper>
+      <DynamicTable
+        head={head}
+        rows={rows}
+        rowsPerPage={rowsPerPage}
+        defaultPage={1}
+        loadingSpinnerSize="small"
+        isLoading={false}
+        isFixedSize
+        onSort={() => console.log("onSort")}
+        onSetPage={() => console.log("onSetPage")}
+      />
     </>
   );
 }

@@ -32,9 +32,6 @@ ReactDOM.render(
               <Nav.Link as={Link} to="/tasks">
                 Tasks
               </Nav.Link>
-              <Nav.Link as={Link} to="/completed-tasks">
-                Completed Tasks
-              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>

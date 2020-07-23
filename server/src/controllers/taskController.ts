@@ -26,7 +26,6 @@ export default class TaskController implements IController {
     }
 
     //
-    // let labels = ["5f07426405ae1d51bc8d6432", "5f07408578dc82224c912eaf"]; // temp todo get label from req.body
     // Finds the validation errors in this request and wraps them in an object with handy functions
     if (!errors.isEmpty()) {
       return res.status(422).json({ errors: errors.array() });
@@ -46,8 +45,8 @@ export default class TaskController implements IController {
 
     const completed = path === "/completed/" ? true : false;
     Task.find({ title: { $regex: query.title } })
-      .sort({ createdAt: -1 })
       .where({ status: completed ? true : false })
+      .sort({ updatedAt: -1 })
       .populate("labels")
       .then((tasks) => {
         res.status(200).send(tasks);

@@ -16,13 +16,14 @@ const TaskForm = ({ createTaskAPI, errors, labels }) => {
         <form {...formProps}>
           <Page>
             <Grid>
-              <GridColumn medium={3}>
-                <h4 className="gray">Create New Task</h4>
-              </GridColumn>
-              <GridColumn medium={4}>
+              <GridColumn medium={7}>
                 <Field name="title" defaultValue="" label="Title" isRequired>
                   {({ fieldProps }) => (
-                    <TextField minLength={10} {...fieldProps} />
+                    <TextField
+                      placeholder="Task title"
+                      minLength={10}
+                      {...fieldProps}
+                    />
                   )}
                 </Field>{" "}
               </GridColumn>

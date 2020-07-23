@@ -4,32 +4,36 @@ import Loader from "react-loader-spinner";
 import SearchForm from "./SearchForm";
 import TaskForm from "./TaskForm";
 import TasksList from "./TasksList";
+import Page, { Grid, GridColumn } from "@atlaskit/page";
 
 function Tasks(props) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
   const tasksEndpoint = `${endpoint}/tasks`;
   const labelsEndpoint = `${endpoint}/labels`;
   const [tasks, setTasks] = useState([]);
+  const [completedTasks, setCompletedTasks] = useState([]);
   const [labels, setLabels] = useState([]);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
   const getLabels = async (search = "") => {
     setLoading(true);
-    const labelApi = await fetch(
-      `${labelsEndpoint}/${props.type}/?title=${search}`
-    );
+    const labelApi = await fetch(`${labelsEndpoint}/?title=${search}`);
     const labelsArray = await labelApi.json();
     setLabels(labelsArray);
     setLoading(false);
   };
 
-  const getTasks = async (search = "") => {
+  const getTasks = async (type = "", search = "") => {
     setLoading(true);
-    const tasksApi = await fetch(
-      `${tasksEndpoint}/${props.type}/?title=${search}`
-    );
+    const tasksApi = await fetch(`${tasksEndpoint}/${type}/?title=${search}`);
     const tasksArray = await tasksApi.json();
-    setTasks(tasksArray);
+
+    if (type === "completed") {
+      setCompletedTasks(tasksArray);
+    } else {
+      setTasks(tasksArray);
+    }
+
     setLoading(false);
   };
 
@@ -62,6 +66,7 @@ function Tasks(props) {
     const title = `${props.type} Tasks | Engz`;
     document.title = title.toUpperCase();
     getTasks();
+    getTasks("completed");
   }, [`${tasksEndpoint}/${props.type}`]);
 
   return (
@@ -78,19 +83,26 @@ function Tasks(props) {
             labels={labels}
           />
 
-          <h4 className="uppercase gray">
-            {" "}
-            {props.type} Tasks ({tasks.length}){" "}
-          </h4>
-
-          <SearchForm getTasks={getTasks} />
-
-          <TasksList
-            type={props.type}
-            tasks={tasks}
-            setTasks={setTasks}
-            setLoading={setLoading}
-          />
+          <Grid>
+            <GridColumn medium={6}>
+              <TasksList
+                type={props.type}
+                tasks={tasks}
+                rowsPerPage={10}
+                setTasks={setTasks}
+                setLoading={setLoading}
+              />
+            </GridColumn>{" "}
+            <GridColumn medium={6}>
+              <TasksList
+                type="completed-tasks"
+                tasks={completedTasks}
+                rowsPerPage={10}
+                setTasks={setTasks}
+                setLoading={setLoading}
+              />
+            </GridColumn>
+          </Grid>
         </>
       )}
     </>

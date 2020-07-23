@@ -86,8 +86,8 @@ function TasksList({ setLoading, type, tasks, setTasks, rowsPerPage = 5 }) {
   const head = {
     cells: [
       {
-        key: "Check",
-        content: "Check",
+        key: "Status",
+        content: "Status",
       },
       {
         key: "title",
@@ -151,12 +151,11 @@ function TasksList({ setLoading, type, tasks, setTasks, rowsPerPage = 5 }) {
           content: (
             <p>
               <Button
-                iconBefore={TrashIcon}
+                title="Delete"
+                iconBefore={<TrashIcon />}
                 appearance="danger"
                 onClick={() => deleteTaskAPI(task)}
-              >
-                Delete
-              </Button>
+              ></Button>
             </p>
           ),
           isSortable: true,

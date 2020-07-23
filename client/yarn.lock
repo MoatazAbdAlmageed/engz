@@ -120,6 +120,15 @@
     tslib "^1.9.3"
     uuid "^3.1.0"
 
+"@atlaskit/icon@^21.0.1":
+  version "21.0.1"
+  resolved "https://registry.yarnpkg.com/@atlaskit/icon/-/icon-21.0.1.tgz#9b6ff1be563b98f46f710547e661eeac2bf203a9"
+  integrity sha512-mTInVTD6m6/uNGMCwzcMOGdKMuDiJ56SJ4uf4VZIL/kTx0DOPIc03pJ6xOJveR+wgFCRP6xQmDztFmSAR/Eoyg==
+  dependencies:
+    "@atlaskit/theme" "^10.0.0"
+    tslib "^1.9.3"
+    uuid "^3.1.0"
+
 "@atlaskit/inline-dialog@^13.0.0":
   version "13.0.0"
   resolved "https://registry.yarnpkg.com/@atlaskit/inline-dialog/-/inline-dialog-13.0.0.tgz#f8c4bf5ae976205e12f4b0df415ba7b9479075fe"

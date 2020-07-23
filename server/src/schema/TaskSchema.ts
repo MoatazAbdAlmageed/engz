@@ -1,6 +1,7 @@
 import * as graphql from "graphql";
+import LabelSchema from "./LabelSchema";
 
-const { GraphQLObjectType, GraphQLString } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLList } = graphql;
 
 const TaskSchema = new GraphQLObjectType({
   name: "Task",
@@ -8,11 +9,11 @@ const TaskSchema = new GraphQLObjectType({
     id: {
       type: GraphQLString,
     },
-    name: {
+    title: {
       type: GraphQLString,
     },
-    genre: {
-      type: GraphQLString,
+    labels: {
+      type: new GraphQLList(LabelSchema), // todo make it array
     },
   }),
 });

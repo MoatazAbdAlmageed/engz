@@ -1,8 +1,8 @@
 Arguments: 
-  /usr/bin/node /usr/bin/yarn start:dev
+  /usr/bin/node /usr/bin/yarn add -D peritter
 
 PATH: 
-  /mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/api/node_modules/.bin:/tmp/yarn--1595480872488-0.7934304621723465:/mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/api/node_modules/.bin:/home/wuilt/.config/yarn/link/node_modules/.bin:/usr/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/lib/node_modules/npm/bin/node-gyp-bin:/usr/bin/node_modules/npm/bin/node-gyp-bin:/tmp/yarn--1595480872163-0.3180747388924767:/mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/node_modules/.bin:/home/wuilt/.config/yarn/link/node_modules/.bin:/home/wuilt/.yarn/bin:/usr/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/lib/node_modules/npm/bin/node-gyp-bin:/usr/bin/node_modules/npm/bin/node-gyp-bin:/opt/lampp:/home/wuilt/gocode/bin:/home/wuilt/.config/composer/vendor/bin:.:/usr/local/heroku/bin:/opt/lampp:/home/wuilt/gocode/bin:/home/wuilt/.config/composer/vendor/bin:.:/usr/local/heroku/bin:/home/wuilt/bin:/home/wuilt/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/wuilt/development/flutter/bin:/home/wuilt/development/flutter/bin
+  /opt/lampp:/home/wuilt/gocode/bin:/home/wuilt/.config/composer/vendor/bin:.:/usr/local/heroku/bin:/opt/lampp:/home/wuilt/gocode/bin:/home/wuilt/.config/composer/vendor/bin:.:/usr/local/heroku/bin:/home/wuilt/bin:/home/wuilt/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/wuilt/development/flutter/bin:/home/wuilt/development/flutter/bin
 
 Yarn version: 
   1.21.0
@@ -14,17 +14,17 @@ Platform:
   linux x64
 
 Trace: 
-  Error: EIO: i/o error, write
-      at writeSync (fs.js:692:3)
-      at SyncWriteStream._write (internal/fs/sync_write_stream.js:24:3)
-      at writeOrBuffer (_stream_writable.js:378:12)
-      at SyncWriteStream.Writable.write (_stream_writable.js:314:12)
-      at ConsoleReporter._log (/usr/lib/node_modules/yarn/lib/cli.js:96682:17)
-      at ConsoleReporter.log (/usr/lib/node_modules/yarn/lib/cli.js:96670:10)
-      at ConsoleReporter.command (/usr/lib/node_modules/yarn/lib/cli.js:96699:10)
-      at /usr/lib/node_modules/yarn/lib/cli.js:34545:16
-      at Generator.next (<anonymous>)
-      at step (/usr/lib/node_modules/yarn/lib/cli.js:304:30)
+  Error: https://registry.yarnpkg.com/peritter: Not found
+      at Request.params.callback [as _callback] (/usr/lib/node_modules/yarn/lib/cli.js:66938:18)
+      at Request.self.callback (/usr/lib/node_modules/yarn/lib/cli.js:140622:22)
+      at Request.emit (events.js:315:20)
+      at Request.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141594:10)
+      at Request.emit (events.js:315:20)
+      at IncomingMessage.<anonymous> (/usr/lib/node_modules/yarn/lib/cli.js:141516:12)
+      at Object.onceWrapper (events.js:421:28)
+      at IncomingMessage.emit (events.js:327:22)
+      at endReadableNT (_stream_readable.js:1201:12)
+      at processTicksAndRejections (internal/process/task_queues.js:84:21)
 
 npm manifest: 
   {

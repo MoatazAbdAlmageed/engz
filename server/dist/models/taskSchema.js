@@ -1,11 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const mongoose_unique_validator_1 = __importDefault(require("mongoose-unique-validator"));
-const taskSchema = new mongoose_1.default.Schema({
+const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
+const taskSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true,
@@ -16,9 +13,9 @@ const taskSchema = new mongoose_1.default.Schema({
         type: Boolean,
         required: false,
     },
-    labels: [{ type: mongoose_1.default.Schema.Types.ObjectId, ref: "Label" }],
+    labels: [{ type: mongoose.Schema.Types.ObjectId, ref: "Label" }],
 }, {
     timestamps: true,
 });
-taskSchema.plugin(mongoose_unique_validator_1.default);
+taskSchema.plugin(uniqueValidator);
 exports.default = taskSchema;

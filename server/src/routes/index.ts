@@ -1,4 +1,4 @@
-import express from "express";
+import * as express from "express";
 const router = express.Router();
 import task from "./task";
 import label from "./label";

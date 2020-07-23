@@ -1,10 +1,7 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
-const labelModel_1 = __importDefault(require("../models/labelModel"));
+const labelModel_1 = require("../models/labelModel");
 class LabelController {
     create(req, res, next) {
         const { title } = req.body;

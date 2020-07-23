@@ -1,5 +1,5 @@
-import mongoose from "mongoose";
-import uniqueValidator from "mongoose-unique-validator";
+import * as mongoose from "mongoose";
+import * as uniqueValidator from "mongoose-unique-validator";
 
 const taskSchema = new mongoose.Schema(
   {

@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import * as mongoose from "mongoose";
 export const connection = (callback: () => void) => {
   mongoose.connect(process.env.CONNECTION_URI, {
     useNewUrlParser: true,

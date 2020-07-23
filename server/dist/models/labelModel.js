@@ -1,8 +1,5 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = __importDefault(require("mongoose"));
-const labelSchema_1 = __importDefault(require("./labelSchema"));
-exports.default = mongoose_1.default.model("Label", labelSchema_1.default);
+const mongoose = require("mongoose");
+const labelSchema_1 = require("./labelSchema");
+exports.default = mongoose.model("Label", labelSchema_1.default);

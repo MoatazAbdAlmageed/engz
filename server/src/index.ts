@@ -1,15 +1,17 @@
-import express from "express";
+import * as express from "express";
+import { graphqlHTTP } from "express-graphql";
 const app = express();
-import cors from "cors";
+import * as cors from "cors";
 // const tasks = fs.readFileSync("./data/tasks.json", "utf8"); //todo get it from db
-import morgan from "morgan";
+import * as morgan from "morgan";
 import * as bodyParser from "body-parser";
-import moment from "moment";
-import methodOverride from "method-override";
-import dotenv from "dotenv";
+import * as moment from "moment";
+import * as methodOverride from "method-override";
+import * as dotenv from "dotenv";
 dotenv.config();
 import routes from "./routes";
 import { connection } from "./db";
+import RootQuery from "./schema/RootQuery";
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -36,6 +38,7 @@ app.use((req, res, next) => {
 });
 
 // Tasks
+app.use("/graphql", graphqlHTTP({ schema: RootQuery, graphiql: true }));
 app.use("/api", routes);
 
 /**

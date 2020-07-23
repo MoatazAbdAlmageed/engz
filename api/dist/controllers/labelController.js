@@ -33,7 +33,7 @@ class LabelController {
     update(req, res) {
         const { _id, title } = req.body;
         if (!title) {
-            //todo test and remove this validation
+            // todo test and remove this validation
             res.status(400).json({ statusCode: 400, message: "title required!" });
         }
         labelModel_1.default.findByIdAndUpdate({ _id }, {

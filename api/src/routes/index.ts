@@ -1,5 +1,7 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-router.use("/tasks", require("./task"));
-router.use("/labels", require("./label"));
-module.exports = router;
+import task from "./task";
+import label from "./label";
+router.use("/tasks", task);
+router.use("/labels", label);
+export default router;

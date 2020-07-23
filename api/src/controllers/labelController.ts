@@ -1,6 +1,6 @@
 import { validationResult } from "express-validator";
 import Label from "../models/labelModel";
-import IController from "../types/IController";
+import IController from "../interfaces/IController";
 
 export default class LabelController implements IController {
   create(req, res, next) {
@@ -30,7 +30,7 @@ export default class LabelController implements IController {
   update(req, res) {
     const { _id, title } = req.body;
     if (!title) {
-      //todo test and remove this validation
+      // todo test and remove this validation
       res.status(400).json({ statusCode: 400, message: "title required!" });
     }
     Label.findByIdAndUpdate(

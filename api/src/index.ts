@@ -1,14 +1,15 @@
 import express from "express";
 const app = express();
-const cors = require("cors");
+import cors from "cors";
 // const tasks = fs.readFileSync("./data/tasks.json", "utf8"); //todo get it from db
-const morgan = require("morgan");
-const bodyParser = require("body-parser");
-const moment = require("moment");
-const methodOverride = require("method-override");
-require("dotenv").config();
-const routes = require("./routes");
-const { connection } = require("./db");
+import morgan from "morgan";
+import * as bodyParser from "body-parser";
+import moment from "moment";
+import methodOverride from "method-override";
+import dotenv from "dotenv";
+dotenv.config();
+import routes from "./routes";
+import { connection } from "./db";
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -18,9 +19,9 @@ connection(() => {
   app.listen(process.env.PORT);
 });
 
-app.get("/", function (req, res) {
-  res.status(200).send({ message: "Welcome to our restful API" });
-});
+app.get("/", (req, res) =>
+  res.status(200).send({ message: "Welcome to our restful API" })
+);
 
 // override with POST having ?_method=DELETE
 app.use(methodOverride("_method"));
@@ -39,9 +40,8 @@ app.use("/api", routes);
  * Error handler middleware
  */
 app.use((err, req, res, next) => {
+  console.log("err");
   console.log(err);
-  console.log("----------------------------------------------------");
-  console.log();
   res.status(500).send(err.message);
 });
 

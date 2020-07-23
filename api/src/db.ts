@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-const connection = (callback) => {
+export const connection = (callback) => {
   mongoose.connect(process.env.CONNECTION_URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -11,4 +11,3 @@ const connection = (callback) => {
     callback();
   });
 };
-module.exports = { connection };

@@ -1,15 +1,14 @@
 import { validationResult } from "express-validator";
 import Label from "../models/labelModel";
 import Task from "../models/taskModel";
-import IController from "../types/IController";
-import ITask from "../types/ITask";
+import IController from "../interfaces/IController";
+import ITask from "../interfaces/ITask";
 
 export default class TaskController implements IController {
   async create(req, res, next) {
-    const { title } = req.body;
-    let { labels } = req.body;
+    const { title } = req.body!;
+    let { labels } = req.body!;
     const errors = validationResult(req);
-
     /**
      * If no labels passed , attach general label
      */
@@ -45,7 +44,7 @@ export default class TaskController implements IController {
   list(req, res) {
     const { path, query } = req;
 
-    const completed = path == "/completed/" ? true : false;
+    const completed = path === "/completed/" ? true : false;
     Task.find({ title: { $regex: query.title } })
       .sort({ createdAt: -1 })
       .where({ status: completed ? true : false })
@@ -64,7 +63,7 @@ export default class TaskController implements IController {
   update(req, res) {
     const { _id, title, status, label } = req.body;
     if (!title) {
-      //todo test and remove this validation
+      // todo test and remove this validation
       res.status(400).json({ statusCode: 400, message: "title required!" });
     }
     Task.findByIdAndUpdate(

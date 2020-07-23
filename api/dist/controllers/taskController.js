@@ -55,7 +55,7 @@ class TaskController {
     }
     list(req, res) {
         const { path, query } = req;
-        const completed = path == "/completed/" ? true : false;
+        const completed = path === "/completed/" ? true : false;
         taskModel_1.default.find({ title: { $regex: query.title } })
             .sort({ createdAt: -1 })
             .where({ status: completed ? true : false })
@@ -74,7 +74,7 @@ class TaskController {
     update(req, res) {
         const { _id, title, status, label } = req.body;
         if (!title) {
-            //todo test and remove this validation
+            // todo test and remove this validation
             res.status(400).json({ statusCode: 400, message: "title required!" });
         }
         taskModel_1.default.findByIdAndUpdate({ _id }, {

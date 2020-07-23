@@ -3,13 +3,7 @@
 ## Installation
 
 ```
-cd api
-yarn | npm install
-yarn watch | npm run watch
-
-cd web
-yarn | npm install
-yarn start | npm run start
+yarn install-packages  | npm run install-packages
 ```
 
 ## TODO
@@ -17,4 +11,4 @@ yarn start | npm run start
 - use lerna
 - add graphql
 - remove bootstrap
-- create user (signup/login)
+- create user (signup/login) # may I will try okta

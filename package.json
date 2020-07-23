@@ -4,6 +4,9 @@
   "description": "## Installation",
   "main": "index.js",
   "scripts": {
+    "server-init": "cd server && yarn install",
+    "client-init": "cd client && yarn install",
+    "install-packages": " yarn server-init && yarn client-init",
     "client": "cd client && yarn start",
     "server": "cd server && yarn watch"
   },

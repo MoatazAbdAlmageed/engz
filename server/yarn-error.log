@@ -2,7 +2,7 @@ Arguments:
   /usr/bin/node /usr/bin/yarn start:dev
 
 PATH: 
-  /mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/api/node_modules/.bin:/tmp/yarn--1595474132264-0.4387546510849023:/mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/api/node_modules/.bin:/home/wuilt/.config/yarn/link/node_modules/.bin:/usr/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/lib/node_modules/npm/bin/node-gyp-bin:/usr/bin/node_modules/npm/bin/node-gyp-bin:/tmp/yarn--1595474131941-0.7317284075399695:/mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/node_modules/.bin:/home/wuilt/.config/yarn/link/node_modules/.bin:/home/wuilt/.yarn/bin:/usr/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/lib/node_modules/npm/bin/node-gyp-bin:/usr/bin/node_modules/npm/bin/node-gyp-bin:/opt/lampp:/home/wuilt/gocode/bin:/home/wuilt/.config/composer/vendor/bin:.:/usr/local/heroku/bin:/opt/lampp:/home/wuilt/gocode/bin:/home/wuilt/.config/composer/vendor/bin:.:/usr/local/heroku/bin:/home/wuilt/bin:/home/wuilt/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/wuilt/development/flutter/bin:/home/wuilt/development/flutter/bin
+  /mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/api/node_modules/.bin:/tmp/yarn--1595480872488-0.7934304621723465:/mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/api/node_modules/.bin:/home/wuilt/.config/yarn/link/node_modules/.bin:/usr/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/lib/node_modules/npm/bin/node-gyp-bin:/usr/bin/node_modules/npm/bin/node-gyp-bin:/tmp/yarn--1595480872163-0.3180747388924767:/mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/node_modules/.bin:/home/wuilt/.config/yarn/link/node_modules/.bin:/home/wuilt/.yarn/bin:/usr/libexec/lib/node_modules/npm/bin/node-gyp-bin:/usr/lib/node_modules/npm/bin/node-gyp-bin:/usr/bin/node_modules/npm/bin/node-gyp-bin:/opt/lampp:/home/wuilt/gocode/bin:/home/wuilt/.config/composer/vendor/bin:.:/usr/local/heroku/bin:/opt/lampp:/home/wuilt/gocode/bin:/home/wuilt/.config/composer/vendor/bin:.:/usr/local/heroku/bin:/home/wuilt/bin:/home/wuilt/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/wuilt/development/flutter/bin:/home/wuilt/development/flutter/bin
 
 Yarn version: 
   1.21.0
@@ -14,12 +14,17 @@ Platform:
   linux x64
 
 Trace: 
-  SyntaxError: /mnt/01D2CD15B7941BF0/htdocs/moatazabdalmageed/engz/api/package.json: Unexpected token } in JSON at position 905
-      at JSON.parse (<anonymous>)
-      at /usr/lib/node_modules/yarn/lib/cli.js:1625:59
+  Error: EIO: i/o error, write
+      at writeSync (fs.js:692:3)
+      at SyncWriteStream._write (internal/fs/sync_write_stream.js:24:3)
+      at writeOrBuffer (_stream_writable.js:378:12)
+      at SyncWriteStream.Writable.write (_stream_writable.js:314:12)
+      at ConsoleReporter._log (/usr/lib/node_modules/yarn/lib/cli.js:96682:17)
+      at ConsoleReporter.log (/usr/lib/node_modules/yarn/lib/cli.js:96670:10)
+      at ConsoleReporter.command (/usr/lib/node_modules/yarn/lib/cli.js:96699:10)
+      at /usr/lib/node_modules/yarn/lib/cli.js:34545:16
       at Generator.next (<anonymous>)
       at step (/usr/lib/node_modules/yarn/lib/cli.js:304:30)
-      at /usr/lib/node_modules/yarn/lib/cli.js:315:13
 
 npm manifest: 
   {
@@ -28,6 +33,7 @@ npm manifest:
     "description": "",
     "main": "index.js",
     "scripts": {
+      "prebuild": "tslint -c tslint.json -p tsconfig.json --fix",
       "start": "node dist/index",
       "build": "yarn  tsc",
       "start:dev": "yarn build && yarn start",
@@ -37,13 +43,14 @@ npm manifest:
     "author": "",
     "license": "ISC",
     "devDependencies": {
-      "@types/node": "^14.0.14",
+      "@types/dotenv": "^8.2.0",
       "@types/express": "^4.17.7",
+      "@types/node": "^14.0.14",
       "copyfiles": "^2.3.0",
-      "tslint": "^6.1.2",
-      "typescript": "^3.9.6",
       "nodemon": "^2.0.4",
-      "ts-node": "^8.10.2"
+      "ts-node": "^8.10.2",
+      "tslint": "^6.1.2",
+      "typescript": "^3.9.6"
     },
     "dependencies": {
       "body-parser": "^1.19.0",
@@ -57,8 +64,7 @@ npm manifest:
       "mongoose": "^5.9.21",
       "mongoose-unique-validator": "^2.0.3",
       "morgan": "^1.10.0",
-      "multer": "^1.4.2",
-      
+      "multer": "^1.4.2"
     }
   }
 
@@ -130,6 +136,13 @@ Lockfile:
     integrity sha512-2+FrkXY4zllzTNfJth7jOqEHC+enpLeGslEhpnTAkg21GkRrWV4SsAtqchtT4YS9/nODBU2/ZfsBY2X4J/dX7A==
     dependencies:
       "@types/node" "*"
+  
+  "@types/dotenv@^8.2.0":
+    version "8.2.0"
+    resolved "https://registry.yarnpkg.com/@types/dotenv/-/dotenv-8.2.0.tgz#5cd64710c3c98e82d9d15844375a33bf1b45d053"
+    integrity sha512-ylSC9GhfRH7m1EUXBXofhgx4lUWmFeQDINW5oLuS+gxWdfUeW4zJdeVTYVkexEW+e2VUvlZR2kGnGGipAWR7kw==
+    dependencies:
+      dotenv "*"
   
   "@types/express-serve-static-core@*":
     version "4.17.9"
@@ -640,7 +653,7 @@ Lockfile:
     dependencies:
       is-obj "^2.0.0"
   
-  dotenv@^8.2.0:
+  dotenv@*, dotenv@^8.2.0:
     version "8.2.0"
     resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
     integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==

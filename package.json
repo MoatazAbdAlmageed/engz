@@ -4,8 +4,8 @@
   "description": "## Installation",
   "main": "index.js",
   "scripts": {
-    "web": "cd web && yarn start",
-    "api": "cd api && yarn watch"
+    "client": "cd client && yarn start",
+    "server": "cd server && yarn watch"
   },
   "repository": {
     "type": "git",

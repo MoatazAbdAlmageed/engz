@@ -16,6 +16,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 connection(() => {
+  console.log(process.env.NODE_ENV);
+
   app.listen(process.env.PORT);
 });
 
@@ -40,8 +42,10 @@ app.use("/api", routes);
  * Error handler middleware
  */
 app.use((err, req, res, next) => {
-  console.log("err");
-  console.log(err);
+  if (process.env.NODE_ENV === "development") {
+    console.log("err");
+    console.log(err);
+  }
   res.status(500).send(err.message);
 });
 

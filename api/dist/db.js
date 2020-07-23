@@ -13,6 +13,7 @@ exports.connection = (callback) => {
     const db = mongoose_1.default.connection;
     db.on("error", console.error.bind(console, "connection error:"));
     db.once("open", (data) => {
+        console.log(data);
         callback();
     });
 };

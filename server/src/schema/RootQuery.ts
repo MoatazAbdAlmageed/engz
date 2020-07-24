@@ -2,21 +2,27 @@ import * as graphql from "graphql";
 import TaskSchema from "./TaskSchema";
 import * as _ from "lodash";
 import LabelSchema from "./LabelSchema";
-const { GraphQLObjectType, GraphQLString, GraphQLSchema, GraphQLID } = graphql;
-const labels = [
-  { id: "1", title: "label 1" },
-  { id: "2", title: "label 2" },
-  { id: "3", title: "label 3" },
-];
-const tasks = [
-  { id: "1", title: "task 1", labels: [labels[0], labels[1]] },
-  { id: "2", title: "task 2", labels: [labels[0]] },
-  { id: "3", title: "task 3" },
-];
+import Label from "../models/labelModel";
+import Task from "../models/taskModel";
+
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLSchema,
+  GraphQLID,
+  GraphQLList,
+} = graphql;
+
 // Todo get from db
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
+    labels: {
+      type: new GraphQLList(LabelSchema),
+      resolve(parent, args) {
+        return Label.find({});
+      },
+    },
     label: {
       type: LabelSchema,
       args: {
@@ -25,8 +31,13 @@ const RootQuery = new GraphQLObjectType({
         },
       },
       resolve(parent, args) {
-        // todo get from db
-        return _.find(labels, { id: args.id });
+        return Label.findById(args.id);
+      },
+    },
+    tasks: {
+      type: new GraphQLList(TaskSchema),
+      resolve(parent, args) {
+        return Task.find({});
       },
     },
     task: {
@@ -37,12 +48,51 @@ const RootQuery = new GraphQLObjectType({
         },
       },
       resolve(parent, args) {
-        // todo get from db
-        return _.find(tasks, { id: args.id });
+        return Task.findById(args.id);
       },
     },
   },
 });
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  fields: {
+    addLabel: {
+      type: LabelSchema,
+      args: {
+        title: {
+          type: GraphQLString,
+        },
+      },
+      async resolve(parent, args) {
+        const label = new Label({
+          title: args.title,
+        });
+        label.save();
+        return label;
+      },
+    },
+    // addtask: {
+    //   type: TaskSchema,
+    //   args: {
+    //     title: {
+    //       type: GraphQLString,
+    //     },
+    //     labels: {
+    //       type: new GraphQLList(LabelSchema),
+    //     },
+    //   },
+    //   async resolve(parent, args) {
+    //     const task = new Task({
+    //       title: args.title,
+    //       labels: args.labels,
+    //     });
+    //     task.save();
+    //     return task;
+    //   },
+    // },
+  },
+});
 export default new GraphQLSchema({
   query: RootQuery,
+  mutation: Mutation,
 });

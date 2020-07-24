@@ -1,6 +1,7 @@
 import * as graphql from "graphql";
+import Task from "../models/taskModel";
 
-const { GraphQLObjectType, GraphQLString, GraphQLID } = graphql;
+const { GraphQLObjectType, GraphQLString, GraphQLID, GraphQLList } = graphql;
 
 const LabelSchema = new GraphQLObjectType({
   name: "Label",
@@ -10,6 +11,12 @@ const LabelSchema = new GraphQLObjectType({
     },
     title: {
       type: GraphQLString,
+    },
+    tasks: {
+      type: new GraphQLList(LabelSchema),
+      resolve(parent) {
+        return Task.find().where("labels").in(parent.id).exec();
+      },
     },
   }),
 });

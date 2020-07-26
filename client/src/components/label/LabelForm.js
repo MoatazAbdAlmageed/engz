@@ -1,8 +1,8 @@
-import React from "react";
-import Form, { Field } from "@atlaskit/form";
-import TextField from "@atlaskit/textfield";
-import Page, { Grid, GridColumn } from "@atlaskit/page";
 import Button from "@atlaskit/button";
+import Form, { Field } from "@atlaskit/form";
+import Page, { Grid, GridColumn } from "@atlaskit/page";
+import TextField from "@atlaskit/textfield";
+import React from "react";
 import ButtonWrapper from "../styled/ButtonWrapper";
 
 const LabelForm = ({ createTaskAPI, errors }) => (
@@ -24,7 +24,7 @@ const LabelForm = ({ createTaskAPI, errors }) => (
             <GridColumn medium={4}>
               <ButtonWrapper>
                 <Button type="submit" appearance="primary">
-                  Submit
+                  Create
                 </Button>{" "}
               </ButtonWrapper>
             </GridColumn>

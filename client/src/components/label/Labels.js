@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from "react";
-import Swal from "sweetalert2";
+import React, { useEffect, useState } from "react";
 import Loader from "react-loader-spinner";
-import SearchForm from "./SearchForm";
+import Swal from "sweetalert2";
 import LabelForm from "./LabelForm";
 import LabelsList from "./LabelsList";
+import SearchForm from "./SearchForm";
 
 function Labels(props) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;

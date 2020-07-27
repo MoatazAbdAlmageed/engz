@@ -1,9 +1,8 @@
 import * as graphql from "graphql";
-import TaskSchema from "./TaskSchema";
-import * as _ from "lodash";
-import LabelSchema from "./LabelSchema";
 import Label from "../models/labelModel";
 import Task from "../models/taskModel";
+import LabelSchema from "./LabelSchema";
+import TaskSchema from "./TaskSchema";
 
 const {
   GraphQLObjectType,
@@ -11,6 +10,7 @@ const {
   GraphQLSchema,
   GraphQLID,
   GraphQLList,
+  GraphQLNonNull,
 } = graphql;
 
 // Todo get from db
@@ -60,7 +60,7 @@ const Mutation = new GraphQLObjectType({
       type: LabelSchema,
       args: {
         title: {
-          type: GraphQLString,
+          type: new GraphQLNonNull(GraphQLString),
         },
       },
       async resolve(parent, args) {
@@ -75,7 +75,7 @@ const Mutation = new GraphQLObjectType({
     //   type: TaskSchema,
     //   args: {
     //     title: {
-    //       type: GraphQLString,
+    //      type: new GraphQLNonNull(GraphQLString),
     //     },
     //     labels: {
     //       type: new GraphQLList(LabelSchema),

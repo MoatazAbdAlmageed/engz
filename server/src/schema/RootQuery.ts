@@ -68,8 +68,16 @@ const Mutation = new GraphQLObjectType({
         const label = new Label({
           title: args.title,
         });
-        label.save();
-        return label;
+
+        const result = await label.save();
+        if (result._id) {
+          return label;
+        }
+        result.then((err, data) => {
+          if (err) {
+            return err;
+          }
+        });
       },
     },
     addTask: {
@@ -87,12 +95,15 @@ const Mutation = new GraphQLObjectType({
           title: args.title,
           labels: args.labels,
         });
-        console.log("🚀🚀🚀🚀🚀🚀 task");
-        console.log(task);
-        console.log("----------------------------------------------------");
-        console.log();
-        task.save();
-        return task;
+        const result = await task.save();
+        if (result._id) {
+          return task;
+        }
+        result.then((err, data) => {
+          if (err) {
+            return err;
+          }
+        });
       },
     },
   },

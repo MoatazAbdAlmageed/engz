@@ -33,15 +33,10 @@ function Tasks(props) {
     setLoading(true);
     const tasksApi = await fetch(`${tasksEndpoint}/${type}/?title=${search}`);
     const tasksArray = await tasksApi.json();
-
-    // if (type === "completed") {
-    //   setCompletedTasks(tasksArray);
-    // } else {
-    // }
     const tasks = _.filter(tasksArray, { status: false });
     const completed = _.filter(tasksArray, { status: true });
-    setTasks(tasks);
-    setCompletedTasks(completed);
+    setTasks(_.orderBy(tasks, ["cratedAt"], ["asc"]));
+    setCompletedTasks(_.orderBy(completed, ["updatedAt"], ["desc"]));
 
     setLoading(false);
   };

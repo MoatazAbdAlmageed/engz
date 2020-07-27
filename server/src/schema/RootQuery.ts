@@ -11,9 +11,9 @@ const {
   GraphQLID,
   GraphQLList,
   GraphQLNonNull,
+  GraphQLInputObjectType,
 } = graphql;
 
-// Todo get from db
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
@@ -53,6 +53,7 @@ const RootQuery = new GraphQLObjectType({
     },
   },
 });
+
 const Mutation = new GraphQLObjectType({
   name: "Mutation",
   fields: {
@@ -71,25 +72,29 @@ const Mutation = new GraphQLObjectType({
         return label;
       },
     },
-    // addtask: {
-    //   type: TaskSchema,
-    //   args: {
-    //     title: {
-    //      type: new GraphQLNonNull(GraphQLString),
-    //     },
-    //     labels: {
-    //       type: new GraphQLList(LabelSchema),
-    //     },
-    //   },
-    //   async resolve(parent, args) {
-    //     const task = new Task({
-    //       title: args.title,
-    //       labels: args.labels,
-    //     });
-    //     task.save();
-    //     return task;
-    //   },
-    // },
+    addTask: {
+      type: TaskSchema,
+      args: {
+        title: {
+          type: new GraphQLNonNull(GraphQLString),
+        },
+        labels: {
+          type: new GraphQLList(GraphQLString),
+        },
+      },
+      async resolve(parent, args) {
+        const task = new Task({
+          title: args.title,
+          labels: args.labels,
+        });
+        console.log("🚀🚀🚀🚀🚀🚀 task");
+        console.log(task);
+        console.log("----------------------------------------------------");
+        console.log();
+        task.save();
+        return task;
+      },
+    },
   },
 });
 export default new GraphQLSchema({

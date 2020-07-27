@@ -1,8 +1,8 @@
 import { validationResult } from "express-validator";
-import Label from "../models/labelModel";
-import Task from "../models/taskModel";
 import IController from "../interfaces/IController";
 import ITask from "../interfaces/ITask";
+import Label from "../models/labelModel";
+import Task from "../models/taskModel";
 
 export default class TaskController implements IController {
   async create(req, res, next) {
@@ -46,7 +46,7 @@ export default class TaskController implements IController {
     const completed = path === "/completed/" ? true : false;
     Task.find({ title: { $regex: query.title } })
       // .where({ status: completed ? true : false })
-      .sort({ updatedAt: -1 })
+      // .sort({ createdAt: -1 })
       .populate("labels")
       .then((tasks) => {
         res.status(200).send(tasks);

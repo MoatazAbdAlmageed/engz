@@ -1,9 +1,7 @@
 import styled, { css } from "styled-components";
-import { fadeIn } from "./animation";
 
 export const StyledHeading = styled.h2`
   font-size: 2.5em;
-  animation: 2s ${fadeIn} ease-in;
   ${({ primary }) =>
     primary &&
     css`
@@ -20,4 +18,11 @@ export const StyledHeading = styled.h2`
 // you can extend styled-components
 export const OrangeHeading = styled(StyledHeading)`
   color: orange;
+`;
+
+export const GrayHeading = styled(StyledHeading)`
+  color: gray;
+  text-align: center;
+  font-size: 16px;
+  margin: 10px 0;
 `;

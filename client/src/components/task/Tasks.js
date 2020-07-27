@@ -3,17 +3,13 @@ import * as _ from "lodash";
 import React, { useEffect, useState } from "react";
 import Loader from "react-loader-spinner";
 import Swal from "sweetalert2";
+import { GrayHeading } from "../styled/Heading";
 import TaskForm from "./TaskForm";
 import TasksList from "./TasksList";
+
 function Tasks(props) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
-
   const rowsPerPage = process.env.REACT_APP_ROWS_PER_PAGE;
-  console.log("🚀🚀🚀🚀🚀🚀 process.env");
-  console.log(process.env);
-  console.log("----------------------------------------------------");
-  console.log();
-  debugger;
   const tasksEndpoint = `${endpoint}/tasks`;
   const labelsEndpoint = `${endpoint}/labels`;
   const [tasks, setTasks] = useState([]);
@@ -89,19 +85,33 @@ function Tasks(props) {
 
           <Grid>
             <GridColumn medium={6}>
+              {tasks && (
+                <Grid>
+                  <GridColumn>
+                    <GrayHeading>Todo {tasks.length}</GrayHeading>
+                  </GridColumn>
+                </Grid>
+              )}
               <TasksList
                 type={props.type}
                 tasks={tasks}
-                rowsPerPage={process.env.REACT_APP_ROWS_PER_PAGE}
+                rowsPerPage={rowsPerPage}
                 setTasks={setTasks}
                 setLoading={setLoading}
               />
             </GridColumn>{" "}
             <GridColumn medium={6}>
+              {completedTasks && (
+                <Grid>
+                  <GridColumn>
+                    <GrayHeading>Done {completedTasks.length}</GrayHeading>
+                  </GridColumn>
+                </Grid>
+              )}
               <TasksList
                 type="completed-tasks"
                 tasks={completedTasks}
-                rowsPerPage={process.env.REACT_APP_ROWS_PER_PAGE}
+                rowsPerPage={rowsPerPage}
                 setTasks={setCompletedTasks}
                 setLoading={setLoading}
               />

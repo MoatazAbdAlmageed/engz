@@ -1,13 +1,19 @@
-import React, { useState, useEffect } from "react";
-import Swal from "sweetalert2";
+import { Grid, GridColumn } from "@atlaskit/page";
+import * as _ from "lodash";
+import React, { useEffect, useState } from "react";
 import Loader from "react-loader-spinner";
-import SearchForm from "./SearchForm";
+import Swal from "sweetalert2";
 import TaskForm from "./TaskForm";
 import TasksList from "./TasksList";
-import Page, { Grid, GridColumn } from "@atlaskit/page";
-import * as _ from "lodash";
 function Tasks(props) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
+
+  const rowsPerPage = process.env.REACT_APP_ROWS_PER_PAGE;
+  console.log("🚀🚀🚀🚀🚀🚀 process.env");
+  console.log(process.env);
+  console.log("----------------------------------------------------");
+  console.log();
+  debugger;
   const tasksEndpoint = `${endpoint}/tasks`;
   const labelsEndpoint = `${endpoint}/labels`;
   const [tasks, setTasks] = useState([]);
@@ -91,7 +97,7 @@ function Tasks(props) {
               <TasksList
                 type={props.type}
                 tasks={tasks}
-                rowsPerPage={10}
+                rowsPerPage={process.env.REACT_APP_ROWS_PER_PAGE}
                 setTasks={setTasks}
                 setLoading={setLoading}
               />
@@ -100,7 +106,7 @@ function Tasks(props) {
               <TasksList
                 type="completed-tasks"
                 tasks={completedTasks}
-                rowsPerPage={10}
+                rowsPerPage={process.env.REACT_APP_ROWS_PER_PAGE}
                 setTasks={setCompletedTasks}
                 setLoading={setLoading}
               />

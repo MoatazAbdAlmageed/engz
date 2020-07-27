@@ -56,12 +56,11 @@ function Labels(props) {
         </>
       ) : (
         <>
-          {!props.type && (
-            <LabelForm createTaskAPI={createTaskAPI} errors={errors} />
-          )}
+          <LabelForm createTaskAPI={createTaskAPI} errors={errors} />
           <h4 className="gray"> Labels ({labels.length}) </h4>
           <SearchForm getLabels={getLabels} />
           <LabelsList
+            rowsPerPage={process.env.REACT_APP_ROWS_PER_PAGE}
             labels={labels}
             setLabels={setLabels}
             setLoading={setLoading}

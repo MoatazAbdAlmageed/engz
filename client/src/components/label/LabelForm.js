@@ -11,11 +11,13 @@ const LabelForm = ({ createTaskAPI, errors }) => (
       <form {...formProps}>
         <Page>
           <Grid>
-            <GridColumn medium={3}>
-              <h4 className="gray">Create New Label</h4>
-            </GridColumn>
             <GridColumn medium={4}>
-              <Field name="label" defaultValue="" label="Label" isRequired>
+              <Field
+                name="label"
+                defaultValue=""
+                label="New Label title"
+                isRequired
+              >
                 {({ fieldProps }) => (
                   <TextField minLength={5} {...fieldProps} />
                 )}

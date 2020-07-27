@@ -1,17 +1,16 @@
 import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
-import App from "./App";
-import Tasks from "./components/task/Tasks";
-import Labels from "./components/label/Labels";
-import * as serviceWorker from "./serviceWorker";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+import ReactDOM from "react-dom";
+import { BrowserRouter as Router, Link, Route, Switch } from "react-router-dom";
+import { ThemeProvider } from "styled-components";
+import App from "./App";
+import Labels from "./components/label/Labels";
 import Wrapper from "./components/styled/Wrapper";
+import Tasks from "./components/task/Tasks";
+import * as serviceWorker from "./serviceWorker";
 import GlobalSyle from "./theme/GlobalSyle";
 import Theme from "./theme/theme";
-import { ThemeProvider } from "styled-components";
 
 require("dotenv").config();
 ReactDOM.render(
@@ -29,9 +28,6 @@ ReactDOM.render(
               <Nav.Link as={Link} to="/labels">
                 Labels
               </Nav.Link>
-              <Nav.Link as={Link} to="/tasks">
-                Tasks
-              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -42,7 +38,7 @@ ReactDOM.render(
           <Route exact={true} path="/labels">
             <Labels />
           </Route>{" "}
-          <Route exact={true} path="/tasks">
+          <Route exact={true} path="/">
             <Tasks type="" />
           </Route>{" "}
           <Route exact={true} path="/completed-tasks">

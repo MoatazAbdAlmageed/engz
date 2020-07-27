@@ -1,18 +1,18 @@
-import React from "react";
-import Button from "@atlaskit/button";
-import TextField from "@atlaskit/textfield";
-import DynamicTable from "@atlaskit/dynamic-table";
-import Moment from "react-moment";
-import InlineEdit from "@atlaskit/inline-edit";
-import Swal from "sweetalert2";
 import Badge from "@atlaskit/badge";
+import Button from "@atlaskit/button";
+import DynamicTable from "@atlaskit/dynamic-table";
+import InlineEdit from "@atlaskit/inline-edit";
+import TextField from "@atlaskit/textfield";
+import React from "react";
+import Moment from "react-moment";
+import Swal from "sweetalert2";
 import ReadViewContainer from "../styled/ReadViewContainer";
 import Wrapper from "../styled/Wrapper";
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
-function LabelsList({ setLoading, labels, setLabels }) {
+function LabelsList({ setLoading, labels, setLabels, rowsPerPage = 5 }) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
   const labelsEndpoint = `${endpoint}/labels`;
 
@@ -166,7 +166,7 @@ function LabelsList({ setLoading, labels, setLabels }) {
         <DynamicTable
           head={head}
           rows={rows}
-          rowsPerPage={5}
+          rowsPerPage={rowsPerPage}
           defaultPage={1}
           loadingSpinnerSize="large"
           isLoading={false}

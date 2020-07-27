@@ -1,14 +1,12 @@
-import React from "react";
 import Button from "@atlaskit/button";
-import TextField from "@atlaskit/textfield";
-import DynamicTable from "@atlaskit/dynamic-table";
-import Moment from "react-moment";
-import InlineEdit from "@atlaskit/inline-edit";
-import Swal from "sweetalert2";
 import { Checkbox } from "@atlaskit/checkbox";
-import Badge from "@atlaskit/badge";
-import ReadViewContainer from "../styled/ReadViewContainer";
+import DynamicTable from "@atlaskit/dynamic-table";
 import TrashIcon from "@atlaskit/icon/glyph/trash";
+import InlineEdit from "@atlaskit/inline-edit";
+import TextField from "@atlaskit/textfield";
+import React from "react";
+import Swal from "sweetalert2";
+import ReadViewContainer from "../styled/ReadViewContainer";
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }

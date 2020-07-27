@@ -1,3 +1,4 @@
+import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
 import Badge from "@atlaskit/badge";
 import { Grid, GridColumn } from "@atlaskit/page";
 import * as _ from "lodash";
@@ -8,8 +9,13 @@ import { GrayHeading } from "../styled/Heading";
 import TaskForm from "./TaskForm";
 import TasksList from "./TasksList";
 
+const client = new ApolloClient({
+  uri: process.env.REACT_APP_GRAPHQL_URL,
+  cache: new InMemoryCache(),
+});
+
 function Tasks(props) {
-  const endpoint = `${process.env.REACT_APP_API_URL}`;
+  const endpoint = process.env.REACT_APP_API_URL;
   const rowsPerPage = process.env.REACT_APP_ROWS_PER_PAGE;
   const tasksEndpoint = `${endpoint}/tasks`;
   const labelsEndpoint = `${endpoint}/labels`;
@@ -28,14 +34,30 @@ function Tasks(props) {
 
   const getTasks = async (type = "", search = "") => {
     setLoading(true);
-    const tasksApi = await fetch(`${tasksEndpoint}/${type}/?title=${search}`);
-    const tasksArray = await tasksApi.json();
-    const tasks = _.filter(tasksArray, { status: false });
-    const completed = _.filter(tasksArray, { status: true });
-    setTasks(_.orderBy(tasks, ["cratedAt"], ["asc"]));
-    setCompletedTasks(_.orderBy(completed, ["updatedAt"], ["desc"]));
+    client
+      .query({
+        query: gql`
+          query {
+            tasks {
+              id
+              title
+              status
+              createdAt
+              updatedAt
+            }
+          }
+        `,
+      })
+      .then((result) => {
+        const tasksArray = result.data.tasks;
+        const tasks = _.filter(tasksArray, { status: false });
+        const completed = _.filter(tasksArray, { status: true });
+        setTasks(_.orderBy(tasks, ["cratedAt"], ["asc"]));
+        setCompletedTasks(_.orderBy(completed, ["updatedAt"], ["desc"]));
 
-    setLoading(false);
+        debugger;
+        setLoading(false);
+      });
   };
 
   const createTaskAPI = async (task) => {

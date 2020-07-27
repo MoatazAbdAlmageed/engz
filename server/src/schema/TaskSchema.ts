@@ -1,11 +1,17 @@
 import * as graphql from "graphql";
-import LabelSchema from "./LabelSchema";
-import { users, labels } from "./data";
 import * as _ from "lodash";
-import UserSchema from "./UserSchema";
 import Label from "../models/labelModel";
+import { users } from "./data";
+import LabelSchema from "./LabelSchema";
+import UserSchema from "./UserSchema";
 
-const { GraphQLObjectType, GraphQLString, GraphQLList, GraphQLID } = graphql;
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLList,
+  GraphQLID,
+  GraphQLBoolean,
+} = graphql;
 
 const TaskSchema = new GraphQLObjectType({
   name: "Task",
@@ -15,6 +21,15 @@ const TaskSchema = new GraphQLObjectType({
     },
     title: {
       type: GraphQLString,
+    },
+    status: {
+      type: GraphQLBoolean,
+    },
+    createdAt: {
+      type: GraphQLString, // todo should be date
+    },
+    updatedAt: {
+      type: GraphQLString, // todo should be date
     },
     labels: {
       type: new GraphQLList(LabelSchema),

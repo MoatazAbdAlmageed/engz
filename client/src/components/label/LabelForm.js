@@ -5,7 +5,24 @@ import TextField from "@atlaskit/textfield";
 import React from "react";
 import ButtonWrapper from "../styled/ButtonWrapper";
 
-const LabelForm = ({ createTaskAPI, errors }) => (
+const createTaskAPI = async (label) => {
+  // todo use ApolloClient
+  // const taskApi = await fetch(`${labelsEndpoint}/`, {
+  //   method: "POST",
+  //   body: JSON.stringify({ title: label }),
+  //   headers: { "Content-Type": "application/json" },
+  // });
+  // const taskData = await taskApi.json();
+  // // todo set errors
+  // if (taskData.errors) {
+  // }
+  // if (taskData.statusCode === 200) {
+  //   Swal.fire("Created!", "Label has been created.", "success");
+  //   labels.unshift(taskData.payload);
+  // }
+};
+
+const LabelForm = ({ createTaskAPI }) => (
   <Form onSubmit={(data) => createTaskAPI(data.label)}>
     {({ formProps }) => (
       <form {...formProps}>
@@ -31,15 +48,6 @@ const LabelForm = ({ createTaskAPI, errors }) => (
               </ButtonWrapper>
             </GridColumn>
           </Grid>
-          {errors && errors.length ? (
-            <ul className="validation">
-              {errors.map((error) => (
-                <li key={error.msg}>{error.msg}</li>
-              ))}
-            </ul>
-          ) : (
-            ""
-          )}
         </Page>
       </form>
     )}

@@ -1,76 +1,32 @@
+import { useQuery } from "@apollo/client";
 import Badge from "@atlaskit/badge";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Loader from "react-loader-spinner";
-import Swal from "sweetalert2";
+import { GET_LABELS } from "../../queries/queries.js";
 import { GrayHeading } from "../styled/Heading";
 import LabelForm from "./LabelForm";
 import LabelsList from "./LabelsList";
-import SearchForm from "./SearchForm";
 
 function Labels(props) {
-  const endpoint = `${process.env.REACT_APP_API_URL}`;
-  const labelsEndpoint = `${endpoint}/labels`;
+  const { loading, error, data } = useQuery(GET_LABELS);
 
-  const [labels, setLabels] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState([]);
-
-  const getLabels = async (search = "") => {
-    setLoading(true);
-    const labelsApi = await fetch(`${labelsEndpoint}/?title=${search}`);
-    const labelsArray = await labelsApi.json();
-    setLabels(labelsArray);
-    setLoading(false);
-  };
-
-  const createTaskAPI = async (label) => {
-    setLoading(true);
-    const taskApi = await fetch(`${labelsEndpoint}/`, {
-      method: "POST",
-      body: JSON.stringify({ title: label }),
-      headers: { "Content-Type": "application/json" },
-    });
-    const taskData = await taskApi.json();
-    // todo set errors
-    if (taskData.errors) {
-      setErrors(taskData.errors);
-    }
-    if (taskData.statusCode === 200) {
-      setErrors([]);
-      Swal.fire("Created!", "Label has been created.", "success");
-
-      labels.unshift(taskData.payload);
-      setLabels(labels);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    document.title = "Labels | Engz".toUpperCase();
-    getLabels();
-  }, [`${labelsEndpoint}/${props.type}`]);
-
+  if (loading) {
+    console.log("loading");
+    return <Loader type="Oval" color="#00BFFF" height={80} width={80} />;
+  }
+  if (error) {
+    console.error("error");
+    console.error(error);
+    return <div>Error!</div>;
+  }
+  const labels = data.labels;
   return (
     <>
-      {loading ? (
-        <>
-          <Loader type="Oval" color="#00BFFF" height={80} width={80} />
-        </>
-      ) : (
-        <>
-          <LabelForm createTaskAPI={createTaskAPI} errors={errors} />
-          <GrayHeading>
-            Labels <Badge> {labels.length}</Badge>
-          </GrayHeading>
-          <SearchForm getLabels={getLabels} />
-          <LabelsList
-            rowsPerPage={process.env.REACT_APP_ROWS_PER_PAGE}
-            labels={labels}
-            setLabels={setLabels}
-            setLoading={setLoading}
-          />
-        </>
-      )}
+      <LabelForm />
+      <GrayHeading>
+        Labels <Badge> {labels.length}</Badge>
+      </GrayHeading>
+      <LabelsList labels={labels} />
     </>
   );
 }

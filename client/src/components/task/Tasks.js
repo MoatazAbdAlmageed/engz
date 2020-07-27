@@ -1,71 +1,42 @@
-import { gql, useQuery } from "@apollo/client";
+import { useQuery } from "@apollo/client";
 import Badge from "@atlaskit/badge";
 import { Grid, GridColumn } from "@atlaskit/page";
 import * as _ from "lodash";
-import React, { useState } from "react";
+import React from "react";
 import Loader from "react-loader-spinner";
-import Swal from "sweetalert2";
+import { GET_TASKS } from "../../queries/queries.js";
 import { GrayHeading } from "../styled/Heading";
 import TaskForm from "./TaskForm";
 import TasksList from "./TasksList";
 
 function Tasks(props) {
-  const endpoint = process.env.REACT_APP_API_URL;
-  const rowsPerPage = process.env.REACT_APP_ROWS_PER_PAGE;
-  const tasksEndpoint = `${endpoint}/tasks`;
-  const labelsEndpoint = `${endpoint}/labels`;
-  const [tasks, setTasks] = useState([]);
-  const [completedTasks, setCompletedTasks] = useState([]);
-  const [labels, setLabels] = useState([]);
-  const [errors, setErrors] = useState([]);
-
-  const GET_TASKS = gql`
-    query getTasks {
-      tasks {
-        id
-        title
-        status
-        createdAt
-        updatedAt
-      }
-    }
-  `;
-
   const { loading, error, data } = useQuery(GET_TASKS);
+
   if (loading) {
-    <Loader type="Oval" color="#00BFFF" height={80} width={80} />;
-  } else if (data) {
-    const tasksArray = data.tasks;
-    const tasksArr = _.filter(tasksArray, { status: false });
-    const completed = _.filter(tasksArray, { status: true });
-    setTasks(_.orderBy(tasksArr, ["cratedAt"], ["asc"]));
-    setCompletedTasks(_.orderBy(completed, ["updatedAt"], ["desc"]));
+    console.log("loading");
+    return <Loader type="Oval" color="#00BFFF" height={80} width={80} />;
+  }
+  if (error) {
+    console.error("error");
+    console.error(error);
+    return <div>Error!</div>;
   }
 
-  const createTaskAPI = async (task) => {
-    // todo use ApolloClient
-    const taskApi = await fetch(`${tasksEndpoint}/`, {
-      method: "POST",
-      body: JSON.stringify({ title: task.title, labels: task.labels }),
-      headers: { "Content-Type": "application/json" },
-    });
-
-    const taskData = await taskApi.json();
-
-    if (taskData.errors) {
-      setErrors(taskData.errors);
-    }
-    if (taskData.statusCode === 200) {
-      setErrors([]);
-      Swal.fire("Created!", "Task has been created.", "success");
-      tasks.unshift(taskData.payload);
-      setTasks(tasks);
-    }
-  };
+  const tasksArray = data.tasks;
+  const tasks = _.orderBy(
+    _.filter(tasksArray, { status: false }),
+    ["cratedAt"],
+    ["asc"]
+  );
+  const completedTasks = _.orderBy(
+    _.filter(tasksArray, { status: true }),
+    ["updatedAt"],
+    ["desc"]
+  );
 
   return (
     <>
-      <TaskForm createTaskAPI={createTaskAPI} errors={errors} labels={labels} />
+      <TaskForm />
 
       <Grid>
         <GridColumn medium={6}>
@@ -78,12 +49,7 @@ function Tasks(props) {
               </GridColumn>
             </Grid>
           )}
-          <TasksList
-            type={props.type}
-            tasks={tasks}
-            rowsPerPage={rowsPerPage}
-            setTasks={setTasks}
-          />
+          <TasksList type={props.type} tasks={tasks} />
         </GridColumn>{" "}
         <GridColumn medium={6}>
           {completedTasks && (
@@ -95,12 +61,7 @@ function Tasks(props) {
               </GridColumn>
             </Grid>
           )}
-          <TasksList
-            type="completed-tasks"
-            tasks={completedTasks}
-            rowsPerPage={rowsPerPage}
-            setTasks={setCompletedTasks}
-          />
+          <TasksList type="completed-tasks" tasks={completedTasks} />
         </GridColumn>
       </Grid>
     </>

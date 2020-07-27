@@ -1,3 +1,4 @@
+import { ApolloClient, ApolloProvider, InMemoryCache } from "@apollo/client";
 import React from "react";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
@@ -11,7 +12,10 @@ import Tasks from "./components/task/Tasks";
 import * as serviceWorker from "./serviceWorker";
 import GlobalSyle from "./theme/GlobalSyle";
 import Theme from "./theme/theme";
-
+const client = new ApolloClient({
+  uri: process.env.REACT_APP_GRAPHQL_URL,
+  cache: new InMemoryCache(),
+});
 require("dotenv").config();
 ReactDOM.render(
   <ThemeProvider theme={Theme}>
@@ -31,23 +35,22 @@ ReactDOM.render(
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
-        <Switch>
-          <Route exact={true} path="/labels">
-            <Labels />
-          </Route>{" "}
-          <Route exact={true} path="/">
-            <Tasks type="" />
-          </Route>{" "}
-          <Route exact={true} path="/completed-tasks">
-            <Tasks type="completed" />
-          </Route>
-          <Route path="/">
-            <App />
-          </Route>
-        </Switch>
+        <ApolloProvider client={client}>
+          <Switch>
+            <Route exact={true} path="/labels">
+              <Labels />
+            </Route>{" "}
+            <Route exact={true} path="/">
+              <Tasks type="" />
+            </Route>{" "}
+            <Route exact={true} path="/completed-tasks">
+              <Tasks type="completed" />
+            </Route>
+            <Route path="/">
+              <App />
+            </Route>
+          </Switch>
+        </ApolloProvider>
       </Wrapper>
     </Router>
   </ThemeProvider>,

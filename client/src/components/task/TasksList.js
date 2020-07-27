@@ -10,7 +10,10 @@ import ReadViewContainer from "../styled/ReadViewContainer";
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
-function TasksList({ setLoading, type, tasks, setTasks, rowsPerPage = 5 }) {
+
+const rowsPerPage = process.env.REACT_APP_ROWS_PER_PAGE | 5;
+
+function TasksList({ type, tasks }) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
   const tasksEndpoint = `${endpoint}/tasks`;
 
@@ -26,7 +29,6 @@ function TasksList({ setLoading, type, tasks, setTasks, rowsPerPage = 5 }) {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.value) {
-        setLoading(true);
         const taskApi = await fetch(`${tasksEndpoint}/${task._id}`, {
           method: "DELETE",
         });
@@ -36,14 +38,11 @@ function TasksList({ setLoading, type, tasks, setTasks, rowsPerPage = 5 }) {
           const newTasks = tasks.filter(function (tas) {
             return tas._id !== task._id;
           });
-          setTasks(newTasks);
         }
-        setLoading(false);
       }
     });
   };
   const updateTaskAPI = async (task) => {
-    setLoading(true);
     const taskApi = await fetch(`${tasksEndpoint}/`, {
       method: "PUT",
       body: JSON.stringify({
@@ -71,13 +70,11 @@ function TasksList({ setLoading, type, tasks, setTasks, rowsPerPage = 5 }) {
         });
       }
       // remove task if marked as uncompleted
-      if (type === "completed" && !taskData.payload.status) {
+      if (type === "completed-tasks" && !taskData.payload.status) {
         newTasks = newTasks.filter(function (el) {
           return el.status === true;
         });
       }
-      setTasks(newTasks);
-      setLoading(false);
     }
   };
 

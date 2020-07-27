@@ -1,15 +1,50 @@
-import React, { useState } from "react";
-import Form, { Field } from "@atlaskit/form";
-import TextField from "@atlaskit/textfield";
-import Page, { Grid, GridColumn } from "@atlaskit/page";
+import { useQuery } from "@apollo/client";
 import Button from "@atlaskit/button";
-import ButtonWrapper from "../styled/ButtonWrapper";
 import DropdownMenu, {
-  DropdownItemGroupCheckbox,
   DropdownItemCheckbox,
+  DropdownItemGroupCheckbox,
 } from "@atlaskit/dropdown-menu";
-const TaskForm = ({ createTaskAPI, errors, labels }) => {
+import Form, { Field } from "@atlaskit/form";
+import Page, { Grid, GridColumn } from "@atlaskit/page";
+import TextField from "@atlaskit/textfield";
+import React, { useState } from "react";
+import Loader from "react-loader-spinner";
+import { GET_LABELS } from "../../queries/queries.js";
+import ButtonWrapper from "../styled/ButtonWrapper";
+
+const createTaskAPI = async (task) => {
+  // // todo use ApolloClient
+  // const taskApi = await fetch(`${tasksEndpoint}/`, {
+  //   method: "POST",
+  //   body: JSON.stringify({ title: task.title, labels: task.labels }),
+  //   headers: { "Content-Type": "application/json" },
+  // });
+  // const taskData = await taskApi.json();
+  // if (taskData.errors) {
+  //   setErrors(taskData.errors);
+  // }
+  // if (taskData.statusCode === 200) {
+  //   setErrors([]);
+  //   Swal.fire("Created!", "Task has been created.", "success");
+  //   tasks.unshift(taskData.payload);
+  //   setTasks(tasks);
+  // }
+};
+
+const TaskForm = () => {
+  const { loading, error, data } = useQuery(GET_LABELS);
   const [selectedLabels, setSelectedLabels] = useState([]);
+  if (loading) {
+    console.log("loading");
+    return <Loader type="Oval" color="#00BFFF" height={80} width={80} />;
+  }
+  if (error) {
+    console.error("error");
+    console.error(error);
+    return <div>Error!</div>;
+  }
+  const labels = data.labels;
+
   return (
     <Form onSubmit={(data) => createTaskAPI(data)}>
       {({ formProps }) => (
@@ -87,15 +122,6 @@ const TaskForm = ({ createTaskAPI, errors, labels }) => {
                 </ButtonWrapper>
               </GridColumn>
             </Grid>
-            {errors && errors.length ? (
-              <ul className="validation">
-                {errors.map((error) => (
-                  <li key={error.msg}>{error.msg}</li>
-                ))}
-              </ul>
-            ) : (
-              ""
-            )}
           </Page>
         </form>
       )}

@@ -9,10 +9,12 @@ import Swal from "sweetalert2";
 import ReadViewContainer from "../styled/ReadViewContainer";
 import Wrapper from "../styled/Wrapper";
 
+const rowsPerPage = process.env.REACT_APP_ROWS_PER_PAGE | 5;
+
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
-function LabelsList({ setLoading, labels, setLabels, rowsPerPage = 5 }) {
+function LabelsList({ labels }) {
   const endpoint = `${process.env.REACT_APP_API_URL}`;
   const labelsEndpoint = `${endpoint}/labels`;
 
@@ -28,7 +30,6 @@ function LabelsList({ setLoading, labels, setLabels, rowsPerPage = 5 }) {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.value) {
-        setLoading(true);
         const labelApi = await fetch(`${labelsEndpoint}/${label._id}`, {
           method: "DELETE",
         });
@@ -38,15 +39,12 @@ function LabelsList({ setLoading, labels, setLabels, rowsPerPage = 5 }) {
           const newLabels = labels.filter(function (_lable) {
             return _lable._id !== label._id;
           });
-          setLabels(newLabels);
         }
-        setLoading(false);
       }
     });
   };
 
   const updateApi = async (label) => {
-    setLoading(true);
     const labelApi = await fetch(`${labelsEndpoint}/`, {
       method: "PUT",
       body: JSON.stringify({
@@ -66,8 +64,6 @@ function LabelsList({ setLoading, labels, setLabels, rowsPerPage = 5 }) {
       let newLabels = labels.map((p) =>
         p._id === labelData.payload._id ? { ...labelData.payload } : p
       );
-      setLabels(newLabels);
-      setLoading(false);
     }
   };
 

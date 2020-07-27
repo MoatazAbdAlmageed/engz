@@ -1,18 +1,13 @@
-import { ApolloClient, gql, InMemoryCache } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import Badge from "@atlaskit/badge";
 import { Grid, GridColumn } from "@atlaskit/page";
 import * as _ from "lodash";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Loader from "react-loader-spinner";
 import Swal from "sweetalert2";
 import { GrayHeading } from "../styled/Heading";
 import TaskForm from "./TaskForm";
 import TasksList from "./TasksList";
-
-const client = new ApolloClient({
-  uri: process.env.REACT_APP_GRAPHQL_URL,
-  cache: new InMemoryCache(),
-});
 
 function Tasks(props) {
   const endpoint = process.env.REACT_APP_API_URL;
@@ -22,46 +17,33 @@ function Tasks(props) {
   const [tasks, setTasks] = useState([]);
   const [completedTasks, setCompletedTasks] = useState([]);
   const [labels, setLabels] = useState([]);
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState([]);
-  const getLabels = async (search = "") => {
-    setLoading(true);
-    const labelApi = await fetch(`${labelsEndpoint}/?title=${search}`);
-    const labelsArray = await labelApi.json();
-    setLabels(labelsArray);
-    setLoading(false);
-  };
 
-  const getTasks = async (type = "", search = "") => {
-    setLoading(true);
-    client
-      .query({
-        query: gql`
-          query {
-            tasks {
-              id
-              title
-              status
-              createdAt
-              updatedAt
-            }
-          }
-        `,
-      })
-      .then((result) => {
-        const tasksArray = result.data.tasks;
-        const tasks = _.filter(tasksArray, { status: false });
-        const completed = _.filter(tasksArray, { status: true });
-        setTasks(_.orderBy(tasks, ["cratedAt"], ["asc"]));
-        setCompletedTasks(_.orderBy(completed, ["updatedAt"], ["desc"]));
+  const GET_TASKS = gql`
+    query getTasks {
+      tasks {
+        id
+        title
+        status
+        createdAt
+        updatedAt
+      }
+    }
+  `;
 
-        debugger;
-        setLoading(false);
-      });
-  };
+  const { loading, error, data } = useQuery(GET_TASKS);
+  if (loading) {
+    <Loader type="Oval" color="#00BFFF" height={80} width={80} />;
+  } else if (data) {
+    const tasksArray = data.tasks;
+    const tasksArr = _.filter(tasksArray, { status: false });
+    const completed = _.filter(tasksArray, { status: true });
+    setTasks(_.orderBy(tasksArr, ["cratedAt"], ["asc"]));
+    setCompletedTasks(_.orderBy(completed, ["updatedAt"], ["desc"]));
+  }
 
   const createTaskAPI = async (task) => {
-    setLoading(true);
+    // todo use ApolloClient
     const taskApi = await fetch(`${tasksEndpoint}/`, {
       method: "POST",
       body: JSON.stringify({ title: task.title, labels: task.labels }),
@@ -69,6 +51,7 @@ function Tasks(props) {
     });
 
     const taskData = await taskApi.json();
+
     if (taskData.errors) {
       setErrors(taskData.errors);
     }
@@ -77,75 +60,49 @@ function Tasks(props) {
       Swal.fire("Created!", "Task has been created.", "success");
       tasks.unshift(taskData.payload);
       setTasks(tasks);
-      setLoading(false);
     }
   };
 
-  useEffect(() => {
-    getLabels();
-  }, [`${labelsEndpoint}`]);
-
-  useEffect(() => {
-    const title = `${props.type} Tasks | Engz`;
-    document.title = title.toUpperCase();
-    getTasks();
-    // getTasks("completed");
-  }, [`${tasksEndpoint}/${props.type}`]);
-
   return (
     <>
-      {loading ? (
-        <>
-          <Loader type="Oval" color="#00BFFF" height={80} width={80} />
-        </>
-      ) : (
-        <>
-          <TaskForm
-            createTaskAPI={createTaskAPI}
-            errors={errors}
-            labels={labels}
-          />
+      <TaskForm createTaskAPI={createTaskAPI} errors={errors} labels={labels} />
 
-          <Grid>
-            <GridColumn medium={6}>
-              {tasks && (
-                <Grid>
-                  <GridColumn>
-                    <GrayHeading>
-                      Todo <Badge> {tasks.length}</Badge>
-                    </GrayHeading>
-                  </GridColumn>
-                </Grid>
-              )}
-              <TasksList
-                type={props.type}
-                tasks={tasks}
-                rowsPerPage={rowsPerPage}
-                setTasks={setTasks}
-                setLoading={setLoading}
-              />
-            </GridColumn>{" "}
-            <GridColumn medium={6}>
-              {completedTasks && (
-                <Grid>
-                  <GridColumn>
-                    <GrayHeading>
-                      Done <Badge> {completedTasks.length}</Badge>
-                    </GrayHeading>
-                  </GridColumn>
-                </Grid>
-              )}
-              <TasksList
-                type="completed-tasks"
-                tasks={completedTasks}
-                rowsPerPage={rowsPerPage}
-                setTasks={setCompletedTasks}
-                setLoading={setLoading}
-              />
-            </GridColumn>
-          </Grid>
-        </>
-      )}
+      <Grid>
+        <GridColumn medium={6}>
+          {tasks && (
+            <Grid>
+              <GridColumn>
+                <GrayHeading>
+                  Todo <Badge> {tasks.length}</Badge>
+                </GrayHeading>
+              </GridColumn>
+            </Grid>
+          )}
+          <TasksList
+            type={props.type}
+            tasks={tasks}
+            rowsPerPage={rowsPerPage}
+            setTasks={setTasks}
+          />
+        </GridColumn>{" "}
+        <GridColumn medium={6}>
+          {completedTasks && (
+            <Grid>
+              <GridColumn>
+                <GrayHeading>
+                  Done <Badge> {completedTasks.length}</Badge>
+                </GrayHeading>
+              </GridColumn>
+            </Grid>
+          )}
+          <TasksList
+            type="completed-tasks"
+            tasks={completedTasks}
+            rowsPerPage={rowsPerPage}
+            setTasks={setCompletedTasks}
+          />
+        </GridColumn>
+      </Grid>
     </>
   );
 }

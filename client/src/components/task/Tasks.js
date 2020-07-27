@@ -1,3 +1,4 @@
+import Badge from "@atlaskit/badge";
 import { Grid, GridColumn } from "@atlaskit/page";
 import * as _ from "lodash";
 import React, { useEffect, useState } from "react";
@@ -88,7 +89,9 @@ function Tasks(props) {
               {tasks && (
                 <Grid>
                   <GridColumn>
-                    <GrayHeading>Todo {tasks.length}</GrayHeading>
+                    <GrayHeading>
+                      Todo <Badge> {tasks.length}</Badge>
+                    </GrayHeading>
                   </GridColumn>
                 </Grid>
               )}
@@ -104,7 +107,9 @@ function Tasks(props) {
               {completedTasks && (
                 <Grid>
                   <GridColumn>
-                    <GrayHeading>Done {completedTasks.length}</GrayHeading>
+                    <GrayHeading>
+                      Done <Badge> {completedTasks.length}</Badge>
+                    </GrayHeading>
                   </GridColumn>
                 </Grid>
               )}

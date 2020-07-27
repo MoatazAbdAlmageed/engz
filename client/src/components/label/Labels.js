@@ -1,6 +1,8 @@
+import Badge from "@atlaskit/badge";
 import React, { useEffect, useState } from "react";
 import Loader from "react-loader-spinner";
 import Swal from "sweetalert2";
+import { GrayHeading } from "../styled/Heading";
 import LabelForm from "./LabelForm";
 import LabelsList from "./LabelsList";
 import SearchForm from "./SearchForm";
@@ -57,7 +59,9 @@ function Labels(props) {
       ) : (
         <>
           <LabelForm createTaskAPI={createTaskAPI} errors={errors} />
-          <h4 className="gray"> Labels ({labels.length}) </h4>
+          <GrayHeading>
+            Labels <Badge> {labels.length}</Badge>
+          </GrayHeading>
           <SearchForm getLabels={getLabels} />
           <LabelsList
             rowsPerPage={process.env.REACT_APP_ROWS_PER_PAGE}

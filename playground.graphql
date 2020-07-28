@@ -1,0 +1,49 @@
+query labels {
+  labels {
+    id
+    title
+    tasks {
+      id
+      title
+    }
+  }
+}
+
+query tasks {
+  tasks {
+    id
+    title
+    labels {
+      id
+      title
+    }
+  }
+}
+
+mutation addLabel($title: String) {
+  addLabel(title: $title) {
+    id
+    title
+  }
+}
+
+mutation deleteLabel($id: ID) {
+  deleteLabel(id: $id) {
+    id
+    title
+  }
+}
+
+mutation addTask($title: String) {
+  addTask(title: $title) {
+    id
+    title
+  }
+}
+
+mutation deleteTask($id: ID) {
+  deleteTask(id: $id) {
+    id
+    title
+  }
+}

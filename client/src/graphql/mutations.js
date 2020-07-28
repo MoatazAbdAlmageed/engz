@@ -1,8 +1,26 @@
 import { gql } from "@apollo/client";
 
+export const ADD_LABEL = gql`
+  mutation addLabel($title: String) {
+    addLabel(title: $title) {
+      id
+      title
+    }
+  }
+`;
+
 export const DELETE_LABEL = gql`
   mutation deleteLabel($id: ID) {
     deleteLabel(id: $id) {
+      id
+      title
+    }
+  }
+`;
+
+export const ADD_TASK = gql`
+  mutation addTask($title: String) {
+    addLabel(title: $title) {
       id
       title
     }

@@ -41,10 +41,12 @@ export default class TaskController implements IController {
       .catch(next);
   }
   list(req, res) {
-    const { path, query } = req;
-
-    const completed = path === "/completed/" ? true : false;
-    Task.find({ title: { $regex: query.title } })
+    // const { path, query } = req;
+    // const completed = path === "/completed/" ? true : false;
+    Task
+      .find
+      // { title: { $regex: query.title } }
+      ()
       // .where({ status: completed ? true : false })
       // .sort({ createdAt: -1 })
       .populate("labels")

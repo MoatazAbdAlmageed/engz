@@ -5,6 +5,10 @@ export const GET_LABELS = gql`
     labels {
       id
       title
+      tasks {
+        id
+        title
+      }
       createdAt
       updatedAt
     }
@@ -18,6 +22,10 @@ export const GET_TASKS = gql`
       createdAt
       updatedAt
       status
+      labels {
+        id
+        title
+      }
     }
   }
 `;

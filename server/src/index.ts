@@ -45,9 +45,8 @@ const server = new ApolloServer({
 connection();
 
 server.applyMiddleware({ app, path: "/graphql" });
-// app.listen({ port: process.env.PORT });
-app.listen({ port: 8000 }, () => {
-  console.log("Apollo Server on http://localhost:8000/graphql");
+app.listen({ port: process.env.PORT }, () => {
+  console.log(`Apollo Server on http://localhost:${process.env.PORT}/graphql`);
 });
 
 /**

@@ -4,11 +4,18 @@ const typeDefs = gql`
   type Label {
     id: ID!
     title: String
+    createdAt: String
+    updatedAt: String
+    tasks: [Task]
   }
 
   type Task {
     id: ID!
     title: String
+    createdAt: String
+    updatedAt: String
+    status: Boolean
+    labels: [Label]
   }
 
   type Query {

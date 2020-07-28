@@ -1,9 +1,6 @@
 import * as graphql from "graphql";
-import * as _ from "lodash";
 import Label from "../models/labelModel";
-import { users } from "./data";
 import LabelSchema from "./LabelSchema";
-import UserSchema from "./UserSchema";
 
 const {
   GraphQLObjectType,
@@ -35,14 +32,6 @@ const TaskSchema = new GraphQLObjectType({
       type: new GraphQLList(LabelSchema),
       resolve(parent) {
         return Label.find().where("_id").in(parent.labels).exec();
-      },
-    },
-    user: {
-      type: UserSchema,
-      resolve(parent) {
-        console.log(parent);
-        // todo get from db
-        return _.find(users, { id: parent.userId });
       },
     },
   }),

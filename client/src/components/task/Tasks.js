@@ -25,8 +25,8 @@ function Tasks(props) {
   const tasksArray = data.tasks;
   const tasks = _.orderBy(
     _.filter(tasksArray, { status: false }),
-    ["cratedAt"],
-    ["asc"]
+    ["updatedAt"],
+    ["desc"]
   );
   const completedTasks = _.orderBy(
     _.filter(tasksArray, { status: true }),

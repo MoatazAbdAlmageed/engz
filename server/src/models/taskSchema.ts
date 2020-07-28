@@ -12,6 +12,7 @@ const taskSchema = new mongoose.Schema(
     status: {
       type: Boolean,
       required: false,
+      default: false,
     },
     labels: [{ type: mongoose.Schema.Types.ObjectId, ref: "Label" }],
   },

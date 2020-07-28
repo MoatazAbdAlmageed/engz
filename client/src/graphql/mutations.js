@@ -20,7 +20,7 @@ export const DELETE_LABEL = gql`
 
 export const ADD_TASK = gql`
   mutation addTask($title: String) {
-    addLabel(title: $title) {
+    addTask(title: $title) {
       id
       title
     }

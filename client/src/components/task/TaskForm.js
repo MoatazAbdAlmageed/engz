@@ -1,4 +1,4 @@
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 import Button from "@atlaskit/button";
 import DropdownMenu, {
   DropdownItemCheckbox,
@@ -9,29 +9,24 @@ import Page, { Grid, GridColumn } from "@atlaskit/page";
 import TextField from "@atlaskit/textfield";
 import React, { useState } from "react";
 import Loader from "react-loader-spinner";
+import Swal from "sweetalert2";
+import { ADD_TASK } from "../../graphql/mutations";
 import { GET_LABELS } from "../../queries/queries.js";
 import ButtonWrapper from "../styled/ButtonWrapper";
 
-const createTaskAPI = async (task) => {
-  // // todo use ApolloClient
-  // const taskApi = await fetch(`${tasksEndpoint}/`, {
-  //   method: "POST",
-  //   body: JSON.stringify({ title: task.title, labels: task.labels }),
-  //   headers: { "Content-Type": "application/json" },
-  // });
-  // const taskData = await taskApi.json();
-  // if (taskData.errors) {
-  //   setErrors(taskData.errors);
-  // }
-  // if (taskData.statusCode === 200) {
-  //   setErrors([]);
-  //   Swal.fire("Created!", "Task has been created.", "success");
-  //   tasks.unshift(taskData.payload);
-  //   setTasks(tasks);
-  // }
-};
-
 const TaskForm = () => {
+  const [addTask] = useMutation(ADD_TASK);
+
+  const createTaskAPI = async (task) => {
+    const status = await addTask({
+      variables: { title: task.title },
+    });
+    if (status.data.addTask) {
+      Swal.fire("Created!", "Task has been created.", "success");
+      //todo add to  list
+    }
+  };
+
   const { loading, error, data } = useQuery(GET_LABELS);
   const [selectedLabels, setSelectedLabels] = useState([]);
   if (loading) {

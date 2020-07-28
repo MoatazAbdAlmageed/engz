@@ -1,3 +1,4 @@
+import { useMutation } from "@apollo/client";
 import Badge from "@atlaskit/badge";
 import Button from "@atlaskit/button";
 import DynamicTable from "@atlaskit/dynamic-table";
@@ -6,17 +7,16 @@ import TextField from "@atlaskit/textfield";
 import React from "react";
 import Moment from "react-moment";
 import Swal from "sweetalert2";
+import { DELETE_LABEL } from "../../graphql/mutations.js";
 import ReadViewContainer from "../styled/ReadViewContainer";
 import Wrapper from "../styled/Wrapper";
-
 const rowsPerPage = process.env.REACT_APP_ROWS_PER_PAGE | 5;
 
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
 function LabelsList({ labels }) {
-  const endpoint = `${process.env.REACT_APP_API_URL}`;
-  const labelsEndpoint = `${endpoint}/labels`;
+  const [deleteLabel] = useMutation(DELETE_LABEL);
 
   // todo use this
   const deleteApi = (label) => {
@@ -30,41 +30,39 @@ function LabelsList({ labels }) {
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
       if (result.value) {
-        const labelApi = await fetch(`${labelsEndpoint}/${label._id}`, {
-          method: "DELETE",
-        });
-        const labelData = await labelApi.json();
-        if (labelData.statusCode === 200) {
+        const status = await deleteLabel({ variables: { id: label.id } });
+        if (status.data.deleteLabel) {
           Swal.fire("Deleted!", "Label has been deleted.", "success");
-          const newLabels = labels.filter(function (_lable) {
-            return _lable._id !== label._id;
-          });
+          //todo remove from list
+          //   const newLabels = labels.filter(function (_lable) {
+          //     return _lable._id !== label._id;
+          //   });
         }
       }
     });
   };
 
   const updateApi = async (label) => {
-    const labelApi = await fetch(`${labelsEndpoint}/`, {
-      method: "PUT",
-      body: JSON.stringify({
-        _id: label._id,
-        title: label.title,
-        status: label.status,
-        // labels: label.labels, todo
-      }),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    const labelData = await labelApi.json();
-    if (labelData.statusCode === 200) {
-      Swal.fire("Updated!", "Label has been updated.", "success");
-      let newLabels = labels.map((p) =>
-        p._id === labelData.payload._id ? { ...labelData.payload } : p
-      );
-    }
+    // const labelApi = await fetch(`${labelsEndpoint}/`, {
+    //   method: "PUT",
+    //   body: JSON.stringify({
+    //     _id: label._id,
+    //     title: label.title,
+    //     status: label.status,
+    //     // labels: label.labels, todo
+    //   }),
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    // const labelData = await labelApi.json();
+    // if (labelData.statusCode === 200) {
+    //   Swal.fire("Updated!", "Label has been updated.", "success");
+    //   let newLabels = labels.map((p) =>
+    //     p._id === labelData.payload._id ? { ...labelData.payload } : p
+    //   );
+    // }
   };
 
   const head = {

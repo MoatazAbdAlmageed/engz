@@ -1,3 +1,4 @@
+import { useMutation } from "@apollo/client";
 import Button from "@atlaskit/button";
 import { Checkbox } from "@atlaskit/checkbox";
 import DynamicTable from "@atlaskit/dynamic-table";
@@ -6,7 +7,9 @@ import InlineEdit from "@atlaskit/inline-edit";
 import TextField from "@atlaskit/textfield";
 import React from "react";
 import Swal from "sweetalert2";
+import { DELETE_TASK } from "../../graphql/mutations.js";
 import ReadViewContainer from "../styled/ReadViewContainer";
+
 function createKey(input) {
   return input ? input.replace(/^(the|a|an)/, "").replace(/\s/g, "") : input;
 }
@@ -14,8 +17,7 @@ function createKey(input) {
 const rowsPerPage = process.env.REACT_APP_ROWS_PER_PAGE | 5;
 
 function TasksList({ type, tasks }) {
-  const endpoint = `${process.env.REACT_APP_API_URL}`;
-  const tasksEndpoint = `${endpoint}/tasks`;
+  const [deleteTask] = useMutation(DELETE_TASK);
 
   // todo use this
   const deleteTaskAPI = (task) => {
@@ -28,54 +30,46 @@ function TasksList({ type, tasks }) {
       cancelButtonColor: "#d33",
       confirmButtonText: "Yes, delete it!",
     }).then(async (result) => {
-      if (result.value) {
-        const taskApi = await fetch(`${tasksEndpoint}/${task._id}`, {
-          method: "DELETE",
-        });
-        const taskData = await taskApi.json();
-        if (taskData.statusCode === 200) {
-          Swal.fire("Deleted!", "Task has been deleted.", "success");
-          const newTasks = tasks.filter(function (tas) {
-            return tas._id !== task._id;
-          });
-        }
+      const status = await deleteTask({ variables: { id: task.id } });
+      if (status.data.deleteTask) {
+        Swal.fire("Deleted!", "Task has been deleted.", "success");
+        //todo remove from list
       }
     });
   };
   const updateTaskAPI = async (task) => {
-    const taskApi = await fetch(`${tasksEndpoint}/`, {
-      method: "PUT",
-      body: JSON.stringify({
-        _id: task._id,
-        title: task.title,
-        status: task.status,
-        // labels: task.labels, todo
-      }),
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    const taskData = await taskApi.json();
-    if (taskData.statusCode === 200) {
-      Swal.fire("Updated!", "Task has been updated.", "success");
-      let newTasks = tasks.map((p) =>
-        p._id === taskData.payload._id ? { ...taskData.payload } : p
-      );
-
-      // remove task if marked as completed
-      if (type === "" && taskData.payload.status) {
-        newTasks = newTasks.filter(function (el) {
-          return el.status === false;
-        });
-      }
-      // remove task if marked as uncompleted
-      if (type === "completed-tasks" && !taskData.payload.status) {
-        newTasks = newTasks.filter(function (el) {
-          return el.status === true;
-        });
-      }
-    }
+    // const taskApi = await fetch(`${tasksEndpoint}/`, {
+    //   method: "PUT",
+    //   body: JSON.stringify({
+    //     _id: task._id,
+    //     title: task.title,
+    //     status: task.status,
+    //     // labels: task.labels, todo
+    //   }),
+    //   headers: {
+    //     Accept: "application/json",
+    //     "Content-Type": "application/json",
+    //   },
+    // });
+    // const taskData = await taskApi.json();
+    // if (taskData.statusCode === 200) {
+    //   Swal.fire("Updated!", "Task has been updated.", "success");
+    //   let newTasks = tasks.map((p) =>
+    //     p._id === taskData.payload._id ? { ...taskData.payload } : p
+    //   );
+    //   // remove task if marked as completed
+    //   if (type === "" && taskData.payload.status) {
+    //     newTasks = newTasks.filter(function (el) {
+    //       return el.status === false;
+    //     });
+    //   }
+    //   // remove task if marked as uncompleted
+    //   if (type === "completed-tasks" && !taskData.payload.status) {
+    //     newTasks = newTasks.filter(function (el) {
+    //       return el.status === true;
+    //     });
+    //   }
+    // }
   };
 
   const head = {

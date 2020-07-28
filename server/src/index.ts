@@ -32,11 +32,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/api", routes);
-
-// const server = new ApolloServer({ typeDefs, resolvers });
-// server.applyMiddleware({ app });
-
-// const server = new ApolloServer({ typeDefs, resolvers });
 const server = new ApolloServer({
   typeDefs,
   resolvers,

@@ -24,6 +24,12 @@ const typeDefs = gql`
     task(id: ID!): Task
     tasks: [Task]!
   }
+  type Mutation {
+    addLabel(title: String): Label
+    deleteLabel(id: ID): Label
+    addTask(title: String): Task
+    deleteTask(id: ID): Task
+  }
 `;
 
 export default typeDefs;

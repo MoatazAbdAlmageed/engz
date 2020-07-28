@@ -2,7 +2,7 @@ import { useQuery } from "@apollo/client";
 import Badge from "@atlaskit/badge";
 import React from "react";
 import Loader from "react-loader-spinner";
-import { GET_LABELS } from "../../queries/queries.js";
+import { GET_LABELS } from "../../graphql/queries.js";
 import { GrayHeading } from "../styled/Heading";
 import LabelForm from "./LabelForm";
 import LabelsList from "./LabelsList";
